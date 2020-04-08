@@ -1,0 +1,330 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=emulateIE7" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="css/style.css" />
+<link rel="stylesheet" type="text/css" href="css/WdatePicker.css" />
+<link rel="stylesheet" type="text/css" href="css/skin_/table.css" />
+<link rel="stylesheet" type="text/css" href="css/jquery.grid.css" />
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/global.js"></script>
+<script type="text/javascript" src="js/jquery.select.js"></script>
+<script type="text/javascript" src="js/core.js"></script>
+<script type="text/javascript" src="js/jquery.pagination.js"></script>
+<script type="text/javascript" src="js/jquery.grid.js"></script>
+<script type="text/javascript" src="js/WdatePicker.js"></script>
+
+<script type="text/javascript" src="js/newjs/medicine.js"></script>
+<script type="text/javascript">
+	$(function() {
+		var level = $("#backLevel").val();
+		if (level != "") {
+			if (level != "all") {
+				selectUser(level);
+			}
+		}
+	});
+	function selectUser(level) {
+		if (level == "" || level == null) {
+			level = $("#level").val();
+		}
+		$
+				.ajax({
+					url : "/selectUser",
+					type : "post",
+					dataType : "json",
+					data : {
+						level : level
+					},
+					success : function(data) {
+						$("#user").html("");
+						$("#page").html("");
+						$
+								.each(
+										data.list,
+										function(index, value) {
+											if (value.level == "1") {
+												var div = $("<tr><td><input type='checkbox' id='"
+														+ value.id
+														+ "' onclick='checkOne()' class='checkboxes' /></td><td>"
+														+ value.id
+														+ "</td><td>"
+														+ value.username
+														+ "</td><td>管理员</td><td>"
+														+ value.createtime
+														+ "</td><td><a href='getUpdate?id="
+														+ value.id
+														+ "'>编辑</a>&nbsp;&nbsp; <a href='javascript:;' onclick='delUser("
+														+ value.id
+														+ ")'>删除</a></td></tr>");
+											} else {
+												var div = $("<tr><td><input type='checkbox' id='"
+														+ value.id
+														+ "' onclick='checkOne()' class='checkboxes' /></td><td>"
+														+ value.id
+														+ "</td><td>"
+														+ value.username
+														+ "</td><td>操作员</td><td>"
+														+ value.createtime
+														+ "</td><td><a href='getUpdate?id="
+														+ value.id
+														+ "'>编辑</a>&nbsp;&nbsp; <a href='javascript:;' onclick='delUser("
+														+ value.id
+														+ ")'>删除</a></td></tr>");
+											}
+											$("#user").append(div);
+										});
+						var page = "<span class='current prev'>&lt;</span><a href='javascript:;' onclick='toUserByPage(1)'>首页</a> <a href='javascript:;' onclick='toUserByPage("
+								+ data.prePage
+								+ ")'>上一页</a><a href='javascript:;' onclick='toUserByPage("
+								+ data.nextPage
+								+ ")'>下一页</a><a href='javascript:;' onclick='toUserByPage("
+								+ data.pageCount
+								+ ")'>末页</a><span class='current next'>&gt;</span>";
+						$("#page").append(page);
+					}
+				});
+	}
+
+	function delUser(id) {
+		var delId = "";
+		var type;
+		if (id == "" || id == null) {
+			type = "some";
+			$(".checkboxes").each(function() {
+				if (this.checked == true) {
+					delId += this.id;
+					delId += ",";
+				}
+			})
+		} else {
+			type = "alone";
+			delId = id;
+		}
+
+		if (delId == "" && type == "some") {
+			alert("请勾选要删除的数据");
+		} else {
+			if (confirm("确定要删除吗？")) {
+				$
+						.ajax({
+							url : 'delUser',
+							type : 'post',
+							dataType : 'json',
+							data : {
+								id : delId,
+								type : type
+							},
+							success : function(data) {
+								alert(data.error);
+								$("#user").html("");
+								$("#page").html("");
+								$
+										.each(
+												data.user.list,
+												function(index, value) {
+													if (value.level == "1") {
+														var div = $("<tr><td><input type='checkbox' id='"
+																+ value.id
+																+ "' onclick='checkOne()' class='checkboxes' /></td><td>"
+																+ value.id
+																+ "</td><td>"
+																+ value.username
+																+ "</td><td>管理员</td><td>"
+																+ value.createtime
+																+ "</td><td><a href='getUpdate?id="
+																+ value.id
+																+ "'>编辑</a>&nbsp;&nbsp; <a href='javascript:;' onclick='delUser("
+																+ value.id
+																+ ")'>删除</a></td></tr>");
+													} else {
+														var div = $("<tr><td><input type='checkbox' id='"
+																+ value.id
+																+ "' onclick='checkOne()' class='checkboxes' /></td><td>"
+																+ value.id
+																+ "</td><td>"
+																+ value.username
+																+ "</td><td>操作员</td><td>"
+																+ value.createtime
+																+ "</td><td><a href='getUpdate?id="
+																+ value.id
+																+ "'>编辑</a>&nbsp;&nbsp; <a href='javascript:;' onclick='delUser("
+																+ value.id
+																+ ")'>删除</a></td></tr>");
+													}
+													$("#user").append(div);
+												});
+								var page = "<span class='current prev'>&lt;</span><a href='javascript:;' onclick='toUserByPage(1)'>首页</a> <a href='javascript:;' onclick='toUserByPage("
+										+ data.prePage
+										+ ")'>上一页</a><a href='javascript:;' onclick='toUserByPage("
+										+ data.nextPage
+										+ ")'>下一页</a><a href='javascript:;' onclick='toUserByPage("
+										+ data.pageCount
+										+ ")'>末页</a><span class='current next'>&gt;</span>";
+								$("#page").append(page);
+							}
+						})
+			}
+		}
+	}
+
+	function toUserByPage(pageIndex) {
+		var level = $("#level").val();
+		$
+				.ajax({
+					url : "toUserByPage",
+					type : "post",
+					dataType : "json",
+					data : {
+						pageIndex : pageIndex,
+						level : level
+					},
+					success : function(data) {
+						$("#user").html("");
+						$("#page").html("");
+						$
+								.each(
+										data.list,
+										function(index, value) {
+											if (value.level == "1") {
+												var div = $("<tr><td><input type='checkbox' id='"
+														+ value.id
+														+ "' onclick='checkOne()' class='checkboxes' /></td><td>"
+														+ value.id
+														+ "</td><td>"
+														+ value.username
+														+ "</td><td>管理员</td><td>"
+														+ value.createtime
+														+ "</td><td><a href='getUpdate?id="
+														+ value.id
+														+ "'>编辑</a>&nbsp;&nbsp; <a href='javascript:;' onclick='delUser("
+														+ value.id
+														+ ")'>删除</a></td></tr>");
+											} else {
+												var div = $("<tr><td><input type='checkbox' id='"
+														+ value.id
+														+ "' onclick='checkOne()' class='checkboxes' /></td><td>"
+														+ value.id
+														+ "</td><td>"
+														+ value.username
+														+ "</td><td>操作员</td><td>"
+														+ value.createtime
+														+ "</td><td><a href='getUpdate?id="
+														+ value.id
+														+ "'>编辑</a>&nbsp;&nbsp; <a href='javascript:;' onclick='delUser("
+														+ value.id
+														+ ")'>删除</a></td></tr>");
+											}
+											$("#user").append(div);
+										});
+						var page = "<span class='current prev'>&lt;</span><a href='javascript:;' onclick='toUserByPage(1)'>首页</a> <a href='javascript:;' onclick='toUserByPage("
+								+ data.prePage
+								+ ")'>上一页</a><a href='javascript:;' onclick='toUserByPage("
+								+ data.nextPage
+								+ ")'>下一页</a><a href='javascript:;' onclick='toUserByPage("
+								+ data.pageCount
+								+ ")'>末页</a><span class='current next'>&gt;</span>";
+						$("#page").append(page);
+					}
+				})
+	}
+</script>
+
+<title>用户管理</title>
+</head>
+
+<body>
+	<div id="container">
+		<div id="hd"></div>
+		<div id="bd">
+			<div id="main">
+				<input type="hidden" th:value="${session.error}" id="error"></input>
+				<input type="hidden" th:value="${backLevel}" id="backLevel"></input>
+				<div class="search-box ue-clear">
+					<div class="search-area">
+						<div class="kv-item ue-clear">
+							<label>选择类型:</label>
+							<div class="kv-item-content">
+								<select style="width: 100px;" id="level">
+									<option value="all">全部</option>
+									<option th:each="c:${level}" th:value="${c.levelno}"
+										th:text="${c.levelname}"></option>
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="search-button" style="margin-left: 20px;">
+						<input style="width: 90px; height: 31px; line-height: 31px;"
+							class="button" type="button" onclick="selectUser()" value="查询" />
+					</div>
+				</div>
+
+				<div class="table">
+					<div class="opt ue-clear">
+						<span class="optarea"> <a href="getAdd" class="add"> <i
+								class="icon"></i> <span class="text">添加</span>
+						</a> <a href="javascript:;" onclick="delUser()" class="delete"> <i
+								class="icon"></i> <span class="text">删除</span>
+						</a>
+						</span>
+					</div>
+
+					<div class="grid">
+						<table class="ui-table" width="100%">
+							<thead>
+								<tr>
+									<th width="5%"><input type="checkbox" id="all"
+										onclick="checkAll()" /></th>
+									<th width="10%" name="id">ID</th>
+									<th width="15%">用户名</th>
+									<th width="20%">权限等级</th>
+									<th width="30%">创建时间</th>
+									<th width="20%">操作</th>
+								</tr>
+							</thead>
+							<tbody class="ui-table-tbody" id="user">
+								<tr th:each="user:${user.list}">
+									<td><input type="checkbox" th:id="${user.id}"
+										onclick="checkOne()" class="checkboxes" /></td>
+									<td th:text="${user.id}"></td>
+									<td th:text="${user.username}"></td>
+									<span th:switch="${user.level}">
+										<td th:case="1">管理员</td>
+										<td th:case="2">操作员</td>
+									</span>
+									<td
+										th:text="${#dates.format(user.createtime,'yyyy-MM-dd HH:mm:ss')}"></td>
+									<td><a th:href="@{/getUpdate(id=${user.id})}">编辑</a>&nbsp;&nbsp;
+										<a href="#" th:onclick="|javascript:delUser(${user.id})|">删除</a></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="pagination" id="page">
+						<span class="current prev">&lt;</span><a href="javascript:;"
+							th:onclick="|javascript:toUserByPage(1)|">首页</a> <a
+							href="javascript:;"
+							th:onclick="|javascript:toUserByPage(${user.prePage})|">上一页</a><a
+							href="javascript:;"
+							th:onclick="|javascript:toUserByPage(${user.nextPage})|">下一页</a><a
+							href="javascript:;"
+							th:onclick="|javascript:toUserByPage(${user.pageCount})|">末页</a>
+						<span class="current next">&gt;</span>
+						<!-- <div class="pxofy">暂时无数据可以显示</div> -->
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+<!-- <script>
+	$('.pagination').pagination(100, {
+		callback : function(page) {
+			//alert(page);	
+		},
+		display_msg : false
+	});
+</script> -->
+</html>

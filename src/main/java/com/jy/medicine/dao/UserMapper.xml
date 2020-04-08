@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jy.medicine.dao.UserMapper">
+	<select id="login" parameterType="java.lang.String" resultType="Users">
+		select * from users where username = #{username} and
+		userpwd=#{userpwd}
+	</select>
+
+	<select id="getAllUsers" parameterType="Map" resultType="Users"
+		statementType="CALLABLE">
+		{call pro_Paging(
+		#{tableName,mode=IN,jdbcType=VARCHAR},
+		#{clumn,mode=IN,jdbcType=VARCHAR},
+		#{tiaojian,mode=IN,jdbcType=VARCHAR},
+		#{pageIndex,mode=IN,jdbcType=INTEGER},
+		#{pageSize,mode=IN,jdbcType=INTEGER},
+		#{pageCount,mode=OUT,jdbcType=INTEGER},
+		#{rowCount,mode=OUT,jdbcType=INTEGER})}
+	</select>
+
+	<select id="getAllLevel" resultType="Level">
+		select * from Level
+	</select>
+
+	<select id="getUserById" parameterType="String" resultType="Users">
+		select * from users where id=#{id}
+	</select>
+
+	<select id="getUser" parameterType="Users" resultType="Users">
+		select *
+		from users where username=#{username}
+		and id not in (#{id})
+	</select>
+
+	<select id="getUserByName" parameterType="String" resultType="Users">
+		select * from users where username=#{username}
+	</select>
+
+	<select id="getUserByLevel" parameterType="String" resultType="Users">
+		select * from users where level=#{level}
+	</select>
+
+	<insert id="addUser" parameterType="Users">
+		insert into
+		users(username,userpwd,level,photo,createtime)
+		values(#{username},#{userpwd},#{level},#{photo},#{createtime})
+	</insert>
+
+	<update id="updateUserById" parameterType="Users">
+		update users set username=#{username}
+		<if test="userpwd!='' and userpwd!=null">
+			,userpwd=#{userpwd}
+		</if>
+		,level=#{level}
+		<if test="photo!='' and photo!=null">
+			,photo=#{photo}
+		</if>
+		where id=#{id}
+	</update>
+
+	<delete id="delUserById" parameterType="int">
+		delete from users where
+		id=#{id}
+	</delete>
+</mapper>

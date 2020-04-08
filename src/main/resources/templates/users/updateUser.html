@@ -1,0 +1,158 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=emulateIE7" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="css/style.css" />
+<link rel="stylesheet" type="text/css" href="css/WdatePicker.css" />
+<link rel="stylesheet" type="text/css" href="css/skin_/form.css" />
+<link rel="stylesheet" type="text/css"
+	href="umeditor/themes/default/_css/umeditor.css" />
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/global.js"></script>
+<script type="text/javascript" src="js/jquery.select.js"></script>
+<script type="text/javascript" src="js/WdatePicker.js"></script>
+<script type="text/javascript">
+	window.UMEDITOR_HOME_URL = 'umeditor/'; // 请换成绝对路径
+</script>
+<script type="text/javascript" src="js/umeditor.config.js"></script>
+<script type="text/javascript" src="js/editor_api.js"></script>
+<script type="text/javascript" src="umeditor/lang/zh-cn/zh-cn.js"></script>
+
+<script type="text/javascript" src="js/newjs/medicine.js"></script>
+<script type="text/javascript">
+	var isAdd = true;
+	function isNull1() {
+		var username = document.getElementById("username");
+		if (username.value == "") {
+			$("#error_username").text("用户名不能为空！");
+			username.focus();
+			isAdd = false;
+			return false;
+		} else {
+			$("#error_username").text("");
+			isAdd = true;
+			return true;
+		}
+	}
+	function isUpdate() {
+		if (confirm("确定修改吗？")) {
+			var username = document.getElementById("username").value;
+			var userId = document.getElementById("userId").value;
+			if (username == "") {
+				$("#error_username").text("用户名不能为空！");
+				return false;
+			} else {
+				if (isAdd) {
+					var isExist = true;
+					$.ajax({
+						type : "post",
+						url : "/isExist",
+						data : {
+							id : userId,
+							username : username
+						},
+						dataType : "json",
+						async : false,
+						success : function(msg) {
+							if (msg == false) {
+								alert("用户名已存在！");
+								isExist = false
+							}
+						}
+					});
+					if (isExist) {
+						return true;
+					} else {
+						return false;
+					}
+				} else {
+					return false;
+				}
+			}
+		} else {
+			return false;
+		}
+	}
+
+	function back() {
+		var level = $("#userLevel").val();
+		var updateIndex = $("#updateIndex").val();
+		var pageIndex = $("#pageIndex").val();
+		window.location.href = "backUser?level=" + level + "&pageIndex="
+				+ pageIndex;
+	}
+</script>
+<title>修改用户信息</title>
+</head>
+
+<body>
+	<div id="container">
+		<div id="hd"></div>
+		<div id="bd">
+			<div id="main">
+				<h2 class="subfild">
+					<span>修改用户</span>
+				</h2>
+				<form action="updateUser" method="post" th:object="${user}">
+					<input type="hidden" th:value="${session.error}" id="error"></input>
+					<input type="hidden" th:value="${session.userLevel}" id="userLevel"></input>
+					<input type="hidden" th:value="${session.pageIndex}" id="pageIndex"></input>
+					<input type="hidden" th:field="*{level}" id="user" /> <input
+						type="hidden" th:value="${user.id}" name="id" id="userId" />
+					<div class="subfild-content base-info">
+						<div class="kv-item ue-clear">
+							<label><span class="impInfo">*</span>用户名</label>
+							<div class="kv-item-content">
+								<input type="text" onblur="isNull1()"
+									th:value="${user.username}" id="username" name="username" />
+							</div>
+							<span class="kv-item-tip error" id="error_username"></span>
+						</div>
+						<div class="kv-item ue-clear time">
+							<label>重设密码</label>
+							<div class="kv-item-content">
+								<input type="text" name="userpwd" />
+							</div>
+						</div>
+
+						<div class="kv-item ue-clear">
+							<label>权限等级</label>
+							<div class="kv-item-content">
+								<select name="level" th:field="*{level}">
+									<option th:each="c:${level}" th:value="${c.levelno}"
+										th:text="${c.levelname}"></option>
+								</select>
+							</div>
+						</div>
+
+						<div class="kv-item ue-clear">
+							<label>头像</label>
+							<div class="kv-item-content file">
+								<span class="text"></span> <input type="file" name="photo" /> <input
+									type="button" class="button normal long2" value="浏览.." />
+							</div>
+						</div>
+					</div>
+
+					<div class="buttons">
+						<input class="button" type="submit" onclick="return isUpdate()"
+							value="修改" />
+					</div>
+					<div class="buttons"
+						style="margin-left: 300px; line-height: 35px; margin-top: -35px; text-align: center;">
+						<a href="#" class="button" onclick="back()">返回</a>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</body>
+
+<!-- <script type="text/javascript">
+	$('select').select();
+	showRemind('input[type=text],textarea', 'color5');
+	UM.getEditor('content');
+</script> -->
+</html>
