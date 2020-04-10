@@ -4,39 +4,47 @@
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=emulateIE7" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<link rel="stylesheet" type="text/css" href="css/style.css" />
-<link rel="stylesheet" type="text/css" href="css/WdatePicker.css" />
-<link rel="stylesheet" type="text/css" href="css/skin_/table.css" />
-<link rel="stylesheet" type="text/css" href="css/jquery.grid.css" />
-<script type="text/javascript" src="js/jquery.js"></script>
-<script type="text/javascript" src="js/global.js"></script>
-<script type="text/javascript" src="js/jquery.select.js"></script>
-<script type="text/javascript" src="js/core.js"></script>
-<script type="text/javascript" src="js/jquery.pagination.js"></script>
-<script type="text/javascript" src="js/jquery.grid.js"></script>
-<script type="text/javascript" src="js/WdatePicker.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/style.css" />
+<link rel="stylesheet" type="text/css" href="/css/WdatePicker.css" />
+<link rel="stylesheet" type="text/css" href="/css/skin_/table.css" />
+<link rel="stylesheet" type="text/css" href="/css/jquery.grid.css" />
+<script type="text/javascript" src="/js/jquery.js"></script>
+<script type="text/javascript" src="/js/global.js"></script>
+<script type="text/javascript" src="/js/jquery.select.js"></script>
+<script type="text/javascript" src="/js/core.js"></script>
+<script type="text/javascript" src="/js/jquery.pagination.js"></script>
+<script type="text/javascript" src="/js/jquery.grid.js"></script>
+<script type="text/javascript" src="/js/WdatePicker.js"></script>
 
-<script type="text/javascript" src="js/newjs/medicine.js"></script>
+<script type="text/javascript" src="/js/newjs/medicine.js"></script>
 <script type="text/javascript">
-	$(function() {
+	/* $(function() {
 		var level = $("#backLevel").val();
 		if (level != "") {
 			if (level != "all") {
 				selectUser(level);
 			}
 		}
-	});
-	function selectUser(level) {
-		if (level == "" || level == null) {
-			level = $("#level").val();
-		}
+	}); */
+	function selectMed() {
+		var med_name = $("#med_name").val();
+		var med_no = $("#med_no").val();
+		var type_id = $("#type_id").val();
+		var factory = $("#factory").val();
+		var minprice = $("#minprice").val();
+		var maxprice = $("#maxprice").val();
 		$
 				.ajax({
-					url : "/selectUser",
+					url : "/selectMed",
 					type : "post",
 					dataType : "json",
 					data : {
-						level : level
+						med_name : med_name,
+						med_no : med_no,
+						type_no : type_no,
+						factory : factory,
+						minprice : minprice,
+						maxprice : maxprice
 					},
 					success : function(data) {
 						$("#user").html("");
@@ -241,30 +249,76 @@
 		<div id="bd">
 			<div id="main">
 				<input type="hidden" th:value="${session.error}" id="error"></input>
-				<input type="hidden" th:value="${backLevel}" id="backLevel"></input>
 				<div class="search-box ue-clear">
 					<div class="search-area">
-						<div class="kv-item ue-clear">
-							<label>选择类型:</label>
+						<div class="kv-item ue-clear"
+							style="width: 270px; float: left; margin-right: 100px">
+							<label>药品名称:</label>
 							<div class="kv-item-content">
-								<select style="width: 100px;" id="level">
+								<input type="text" id="med_name" name="med_name"
+									style="width: auto" />
+							</div>
+						</div>
+
+
+
+						<div class="kv-item ue-clear"
+							style="width: 270px; float: left; margin-right: 100px">
+							<label>药品编码:</label>
+							<div class="kv-item-content">
+								<input type="text" id="med_no" name="med_no" style="width: auto" />
+							</div>
+						</div>
+
+						<div class="kv-item ue-clear"
+							style="width: 270px; float: left; margin-right: 100px">
+							<label>药品种类:</label>
+							<div class="kv-item-content">
+								<select style="width: 100px;" id="type_id">
 									<option value="all">全部</option>
 									<option th:each="c:${medType}" th:value="${c.id}"
 										th:text="${c.typename}"></option>
 								</select>
 							</div>
 						</div>
+
+						<div class="kv-item ue-clear"
+							style="width: 270px; float: left; margin-right: 100px">
+							<label>生产厂家:</label>
+							<div class="kv-item-content">
+								<input type="text" id="factory" name="factory"
+									style="width: auto" />
+							</div>
+						</div>
+
+						<div class="kv-item ue-clear"
+							style="width: 270px; float: left; margin-right: 100px">
+							<label>最低价:</label>
+							<div class="kv-item-content">
+								<input type="text" id="minprice" name="minprice"
+									style="width: auto" />
+							</div>
+						</div>
+
+						<div class="kv-item ue-clear"
+							style="width: 270px; float: left; margin-right: 100px">
+							<label>最高价:</label>
+							<div class="kv-item-content">
+								<input type="text" id="maxprice" name="maxprice"
+									style="width: auto" />
+							</div>
+						</div>
 					</div>
-					<div class="search-button" style="margin-left: 20px;">
+					<div class="search-button" style="float: right;">
 						<input style="width: 90px; height: 31px; line-height: 31px;"
-							class="button" type="button" onclick="selectUser()" value="查询" />
+							class="button" type="button" onclick="selectMed()" value="查询" />
 					</div>
 				</div>
 
 				<div class="table">
 					<div class="opt ue-clear">
-						<span class="optarea"> <a href="getAdd" class="add"> <i
-								class="icon"></i> <span class="text">添加</span>
+						<span class="optarea"> <a href="toAddMed" class="add">
+								<i class="icon"></i> <span class="text">添加</span>
 						</a> <a href="javascript:;" onclick="delUser()" class="delete"> <i
 								class="icon"></i> <span class="text">删除</span>
 						</a>

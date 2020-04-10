@@ -43,6 +43,7 @@ public class UserController {
 	@RequestMapping("user")
 	public String getAllUsers(String level, String pageIndex, Model model, HttpSession session) {
 		session.setAttribute("userLevel", "all");
+		session.setAttribute("pageIndex", 1);
 		Paging paging = new Paging();
 		paging.setPageIndex(1);
 		if (pageIndex != null) {
@@ -156,23 +157,23 @@ public class UserController {
 		int result = userService.delUserById(id, type);
 		if (result > 0) {
 			map.put("error", "删除成功！");
-			map.put("user", userService.getAllUsers(paging));
 		} else {
 			map.put("error", "删除失败！");
 		}
+		map.put("user", userService.getAllUsers(paging));
 		return map;
 	}
-	
+
 	@RequestMapping("backUser")
-	public String backUser(int pageIndex,String level,Model model){
-		Paging paging=new Paging();
+	public String backUser(int pageIndex, String level, Model model) {
+		Paging paging = new Paging();
 		paging.setPageIndex(pageIndex);
 		if ("all".equals(level)) {
 			paging.setTiaojian("");
 		} else {
 			paging.setTiaojian("level='" + level + "'");
 		}
-		model.addAttribute("user",userService.getAllUsers(paging));
+		model.addAttribute("user", userService.getAllUsers(paging));
 		model.addAttribute("level", userService.getAllLevel());
 		return "users/user";
 	}

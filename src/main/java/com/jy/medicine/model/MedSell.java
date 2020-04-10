@@ -2,8 +2,13 @@ package com.jy.medicine.model;
 
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 /**
  * 药品销售信息
+ * 
  * @author Administrator
  *
  */
@@ -14,6 +19,8 @@ public class MedSell {
 	private String sellname;// 药品名称
 	private double sellprice;// 药品价格
 	private int sellcount;// 药品数量
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
 	private Date selltime;// 交易时间
 
 	public int getId() {

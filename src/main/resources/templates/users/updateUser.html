@@ -37,14 +37,14 @@
 		}
 	}
 	function isUpdate() {
-		if (confirm("确定修改吗？")) {
-			var username = document.getElementById("username").value;
-			var userId = document.getElementById("userId").value;
-			if (username == "") {
-				$("#error_username").text("用户名不能为空！");
-				return false;
-			} else {
-				if (isAdd) {
+		if (isAdd) {
+			if (confirm("确定修改吗？")) {
+				var username = document.getElementById("username").value;
+				var userId = document.getElementById("userId").value;
+				if (username == "") {
+					$("#error_username").text("用户名不能为空！");
+					return false;
+				} else {
 					var isExist = true;
 					$.ajax({
 						type : "post",
@@ -67,9 +67,9 @@
 					} else {
 						return false;
 					}
-				} else {
-					return false;
 				}
+			} else {
+				return false;
 			}
 		} else {
 			return false;
@@ -78,7 +78,6 @@
 
 	function back() {
 		var level = $("#userLevel").val();
-		var updateIndex = $("#updateIndex").val();
 		var pageIndex = $("#pageIndex").val();
 		window.location.href = "backUser?level=" + level + "&pageIndex="
 				+ pageIndex;
@@ -98,7 +97,7 @@
 				<form action="updateUser" method="post" th:object="${user}">
 					<input type="hidden" th:value="${session.error}" id="error"></input>
 					<input type="hidden" th:value="${session.userLevel}" id="userLevel"></input>
-					<input type="hidden" th:value="${session.pageIndex}" id="pageIndex"></input>
+					<input type="hidden" th:value="${updateIndex}" id="pageIndex"></input>
 					<input type="hidden" th:field="*{level}" id="user" /> <input
 						type="hidden" th:value="${user.id}" name="id" id="userId" />
 					<div class="subfild-content base-info">

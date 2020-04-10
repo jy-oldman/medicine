@@ -4,7 +4,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jy.medicine.dao.MedTypeMapper">
 
-	<select id="getMedType" parameterType="Map" resultType="MedType"
+	<select id="getAllMedType" parameterType="Map" resultType="MedType"
 		statementType="CALLABLE">
 		{call pro_Paging(
 		#{tableName,mode=IN,jdbcType=VARCHAR},
@@ -14,5 +14,42 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		#{pageSize,mode=IN,jdbcType=INTEGER},
 		#{pageCount,mode=OUT,jdbcType=INTEGER},
 		#{rowCount,mode=OUT,jdbcType=INTEGER})}
+	</select>
+
+	<insert id="addMedType" parameterType="MedType">
+		insert into
+		med_type(typename,description,createtime)
+		values(#{typename},#{description},#{createtime})
+	</insert>
+
+	<select id="getMedType" parameterType="MedType" resultType="MedType">
+		select *
+		from med_type where typename=#{typename}
+		and id not in (#{id})
+	</select>
+
+	<select id="getMedTypeByName" parameterType="String" resultType="MedType">
+		select * from med_type where typename=#{typename}
+	</select>
+
+	<select id="getMedTypeById" parameterType="String" resultType="MedType">
+		select * from med_type where id=#{id}
+	</select>
+
+	<update id="updateMedTypeById" parameterType="MedType">
+		update med_type set
+		typename=#{typename},description=#{description}
+		where id=#{id}
+	</update>
+
+	<delete id="delMedTypeById" parameterType="int">
+		delete from med_type
+		where
+		id=#{id}
+	</delete>
+
+	<select id="getMedByType" parameterType="int" resultType="Medicine">
+		select
+		* from medicine where type_id=#{id}
 	</select>
 </mapper>

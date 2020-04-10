@@ -4,11 +4,11 @@
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=emulateIE7" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<link rel="stylesheet" type="text/css" href="css/style.css" />
-<link rel="stylesheet" type="text/css" href="css/skin_/main.css" />
-<link rel="stylesheet" type="text/css" href="css/jquery.dialog.css" />
-<script type="text/javascript" src="js/jquery.js"></script>
-<script type="text/javascript" src="js/global.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/style.css" />
+<link rel="stylesheet" type="text/css" href="/css/skin_/main.css" />
+<link rel="stylesheet" type="text/css" href="/css/jquery.dialog.css" />
+<script type="text/javascript" src="/js/jquery.js"></script>
+<script type="text/javascript" src="/js/global.js"></script>
 <title>医药后台管理系统</title>
 </head>
 
@@ -19,7 +19,7 @@
 				<h1 class="logo">
 					<a href="javascript:;" class="logo-icon"></a>
 				</h1>
-				<div class="user-info">
+				<div class="user-info" style="width: auto;">
 					<a href="javascript:;" class="user-avatar"><span><i
 							class="info-num">2</i><img th:src="${user.photo}" alt="头像"
 							style="width: 38px; height: 38px; border-radius: 50%; margin-left: -2px; margin-top: -2px;" /></span></a>
@@ -69,7 +69,7 @@
 			</div>
 		</div>
 		<div id="bd">
-			<iframe width="100%" height="100%" id="mainIframe" src="nav"
+			<iframe width="100%" height="100%" id="mainIframe" src="/nav"
 				frameborder="0"></iframe>
 		</div>
 
@@ -154,8 +154,8 @@
 	</div>
 
 </body>
-<script type="text/javascript" src="js/core.js"></script>
-<script type="text/javascript" src="js/jquery.dialog.js"></script>
+<script type="text/javascript" src="/js/core.js"></script>
+<script type="text/javascript" src="/js/jquery.dialog.js"></script>
 <script type="text/javascript">
 	$("#bd").height($(window).height() - $("#hd").outerHeight() - 26);
 
@@ -179,7 +179,7 @@
 		$('.exitDialog').Dialog('close');
 
 		if ($(this).hasClass('ok')) {
-			window.location.href = "login.html";
+			window.location.href = "outSystem";
 		}
 	});
 

@@ -21,44 +21,40 @@
 <script type="text/javascript" src="umeditor/lang/zh-cn/zh-cn.js"></script>
 <script type="text/javascript">
 	function isExist() {
-		var username = document.getElementById("username").value;
-		var userpwd = document.getElementById("userpwd").value;
-		if (username != "" && userpwd != "") {
-			if (userpwd.length < 6) {
-				alert("密码长度不小于6位字符");
-				return false;
-			} else {
-				var isExist=true;
-				$.ajax({
-					url : "isExist",
-					type : "post",
-					dataType : "json",
-					data : {
-						username : username
-					},
-					async : false,
-					success : function(msg) {
-						if(msg==false){
-							alert("用户名已存在！");
-							isExist=false;
-						}else{
-							isExist=true;
-						}
+		var name = $("#typename").val();
+		var description = $("#description").val();
+		if (name != "" && description != "") {
+			var isExist = true;
+			$.ajax({
+				url : "medType/isExist",
+				type : "post",
+				dataType : "json",
+				data : {
+					typename : name
+				},
+				async : false,
+				success : function(msg) {
+					if (msg == false) {
+						alert("药品种类名称已存在！");
+						isExist = false;
+					} else {
+						isExist = true;
 					}
-				});
-				if (isExist) {
-					return true;
-				} else {
-					return false;
 				}
+			});
+			if (isExist) {
+				return true;
+			} else {
+				return false;
 			}
+
 		} else {
-			alert("用户名或密码不能为空！");
+			alert("信息未填写完整！");
 			return false;
 		}
 	}
 </script>
-<title>添加用户</title>
+<title>添加药品种类</title>
 </head>
 
 <body>
@@ -67,43 +63,22 @@
 		<div id="bd">
 			<div id="main">
 				<h2 class="subfild">
-					<span>添加用户</span>
+					<span style="width: 100px">添加药品种类</span>
 				</h2>
-				<form action="addUser" method="post" enctype="multipart/form-data">
+				<form action="addMedType" method="post"
+					enctype="multipart/form-data">
 					<input type="hidden" th:value="${session.error}" id="error"></input>
 					<div class="subfild-content base-info">
 						<div class="kv-item ue-clear">
-							<label><span class="impInfo">*</span>用户名</label>
-							<div class="kv-item-content">
-								<input type="text" id="username" name="username"
-									placeholder="用户名限制在12个字符" maxlength="12" />
-							</div>
-							<span class="kv-item-tip error" id="error_username"></span>
-						</div>
-						<div class="kv-item ue-clear">
-							<label><span class="impInfo">*</span>用户密码</label>
-							<div class="kv-item-content">
-								<input type="text" id="userpwd" name="userpwd"
-									placeholder="密码长度不小于6个字符" />
-							</div>
-							<span class="kv-item-tip error" id="error_userpwd"></span>
-						</div>
-
-						<div class="kv-item ue-clear">
-							<label>权限等级</label>
-							<div class="kv-item-content">
-								<select name="level">
-									<option th:each="c:${level}" th:value="${c.levelno}"
-										th:text="${c.levelname}"></option>
-								</select>
+							<label><span class="impInfo">*</span>药品种类名称</label>
+							<div class="kv-item-content" style="margin-left: 20px">
+								<input type="text" id="typename" name="typename" maxlength="12" />
 							</div>
 						</div>
-
 						<div class="kv-item ue-clear">
-							<label>头像</label>
-							<div class="kv-item-content file">
-								<span class="text"></span> <input type="file" name="attach_pic" />
-								<input type="button" class="button normal long2" value="浏览.." />
+							<label><span class="impInfo">*</span>药品种类描述</label>
+							<div class="kv-item-content" style="margin-left: 20px">
+								<textarea rows="" cols="" name="description" id="description"></textarea>
 							</div>
 						</div>
 					</div>
@@ -114,7 +89,7 @@
 					</div>
 					<div class="buttons"
 						style="margin-left: 300px; line-height: 35px; margin-top: -35px; text-align: center;">
-						<a href="user" class="button">返回</a>
+						<a href="medType" class="button">返回</a>
 					</div>
 				</form>
 			</div>

@@ -3,6 +3,18 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jy.medicine.dao.MedicineMapper">
+	<resultMap id="BaseResultMap" type="com.jy.medicine.model.Medicine">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="type_id" property="type_id" jdbcType="INTEGER" />
+		<result column="med_no" property="med_no" jdbcType="VARCHAR" />
+		<result column="med_name" property="med_name" jdbcType="VARCHAR" />
+		<result column="factory" property="factory" jdbcType="VARCHAR" />
+		<result column="price" property="price" jdbcType="REAL" />
+		<result column="description" property="description" jdbcType="VARCHAR" />
+		<result column="med_count" property="med_count" jdbcType="INTEGER" />
+		<result column="req_count" property="req_count" jdbcType="INTEGER" />
+		<result column="picture" property="picture" jdbcType="VARCHAR" />
+	</resultMap>
 
 	<select id="getAllMedicines" parameterType="Map" resultType="Medicine"
 		statementType="CALLABLE">
