@@ -27,10 +27,11 @@ public class MedTypeController {
 	MedTypeService medTypeService;
 
 	@RequestMapping("medType")
-	public String getMedType(Model model) {
+	public String getMedType(Model model, HttpSession session) {
 		Paging paging = new Paging();
 		paging.setPageIndex(1);
 		model.addAttribute("medtype", medTypeService.getMedType(paging));
+		session.removeAttribute("medType_tiaojian");
 		return "medicines/medtype";
 	}
 
@@ -47,8 +48,8 @@ public class MedTypeController {
 	public Paging selectMedType(String name, HttpSession session) {
 		Paging paging = new Paging();
 		paging.setPageIndex(1);
-		session.setAttribute("typename", name);
-		paging.setTiaojian("typename like '%" + name + "%'");
+		paging.setTiaojian(" typename like '%" + name + "%'");
+		session.setAttribute("medType_tiaojian", paging.getTiaojian());
 		return medTypeService.getMedType(paging);
 	}
 
@@ -79,7 +80,6 @@ public class MedTypeController {
 		} else {
 			medType2 = medTypeService.getMedType(medType);
 		}
-
 		if (medType2 != null) {
 			return "false";
 		} else {
@@ -139,15 +139,14 @@ public class MedTypeController {
 
 	@RequestMapping("medType/toDataByPage")
 	@ResponseBody
-	public Paging toDataByPage(int pageIndex, String name, HttpSession session) {
+	public Paging toDataByPage(int pageIndex, String tiaojian, HttpSession session) {
 		Paging paging = new Paging();
 		paging.setPageIndex(pageIndex);
-		name = (String) session.getAttribute("typename");
-		if (name == null || name == "") {
-			System.out.println(name);
+		tiaojian = (String) session.getAttribute("medType_tiaojian");
+		if (tiaojian == null || tiaojian == "") {
 			paging.setTiaojian("");
 		} else {
-			paging.setTiaojian("typename like '%" + name + "%'");
+			paging.setTiaojian(tiaojian);
 		}
 		return medTypeService.getMedType(paging);
 	}

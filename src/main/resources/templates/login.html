@@ -1,5 +1,6 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=emulateIE7" />
@@ -8,80 +9,66 @@
 <script type="text/javascript" src="/js/jquery.js"></script>
 <script type="text/javascript" src="/js/jquery.select.js"></script>
 <script type="text/javascript">
-$(function(){
-	var error=$("#error").val();
-	if(error!=""){
-		alert(error);
-		$("#error").val("");
+	$(function() {
+		var error = $("#error").val();
+		if (error != "") {
+			alert(error);
+			$("#error").val("");
+		}
+
+	})
+	function show() {
+		var username = document.getElementById("userName");
+		var userpwd = document.getElementById("password");
+		var isNull = true;
+		if (username.value == "") {
+			isNull = false;
+		}
+		if (userpwd.value == "") {
+			isNull = false;
+		}
+		if (!isNull) {
+			alert("用户名或密码不能为空！");
+			return false;
+		} else {
+			return true;
+		}
+
 	}
-	
-})
-function show(){
-	var username=document.getElementById("userName");
-	var userpwd=document.getElementById("password");
-	var isNull=true;
-	if(username.value==""){
-		isNull=false;
-	}
-    if(userpwd.value==""){
-		isNull=false;
-    }
-    if(!isNull){
-    	alert("用户名或密码不能为空！");
-    	return false;
-    }else{
-    	return true;
-    }
-	
-}
 </script>
 <title>用户登录</title>
 </head>
 
 <body>
-<div id="container">
-    <div id="bd">
-    	<div id="main">
-        	<div class="login-box">
-                <div id="logo"></div>
-                <h1></h1>
-                <form action="login" method="post">
-                <div><input type="hidden" th:value="${error}" id="error"></input></div>
-                <div class="input username" id="username">
-                    <label for="userName">用户名</label>
-                    <span></span>
-                    <input type="text" name="username" id="userName" />
-                </div>
-                <div class="input psw" id="psw">
-                    <label for="password">密&nbsp;&nbsp;&nbsp;&nbsp;码</label>
-                    <span></span>
-                    <input type="password" name="userpwd" id="password" />
-                </div>
-                <div class="input validate" id="validate">
-                    <label for="valiDate">验证码</label>
-                    <input type="text" id="valiDate" />
-                    <div class="value">X3D5</div>
-                </div>
-                <div class="styleArea">
-                    <div class="styleWrap">
-                        <select name="style">
-                            <option value="默认风格">默认风格</option>
-                            <option value="红色风格">红色风格</option>
-                            <option value="绿色风格">绿色风格</option>
-                        </select>
-                    </div>
-                </div>
-                <div id="btn" class="loginButton">
-                    <input type="submit" class="button" onclick="return show()" value="登录"  />
-                </div>
-                </form>
-            </div>
-        </div>
-        <div id="ft">CopyRight&nbsp;2014&nbsp;&nbsp;版权所有&nbsp;&nbsp;More Templates <a href="http://www.cssmoban.com/" target="_blank" title="模板之家">模板之家</a> - Collect from <a href="http://www.cssmoban.com/" title="网页模板" target="_blank">网页模板</a> &nbsp;&nbsp;</div>
-    </div>
-   
-</div>
-
+	<div id="container">
+		<div id="bd">
+			<div id="main">
+				<div class="login-box">
+					<div id="logo"></div>
+					<h1></h1>
+					<form action="login" method="post">
+						<input type="hidden" th:value="${error}" id="error"></input>
+						<div class="input username" id="username">
+							<label for="userName">用户名</label> <span></span> <input
+								type="text" name="username" id="userName" />
+						</div>
+						<div class="input psw" id="psw">
+							<label for="password">密&nbsp;&nbsp;&nbsp;&nbsp;码</label> <span></span>
+							<input type="password" name="userpwd" id="password" />
+						</div>
+						<div id="btn" class="loginButton" style="margin-left: -265px">
+							<input type="submit" class="button" onclick="return show()"
+								value="登录" />
+						</div>
+					</form>
+				</div>
+			</div>
+			<div id="ft">
+				CopyRight&nbsp;2014&nbsp;&nbsp;版权所有&nbsp;&nbsp; <a href="#"
+					title="模板之家">医药管理系统</a>
+			</div>
+		</div>
+	</div>
 </body>
 <script type="text/javascript">
 	var height = $(window).height() > 445 ? $(window).height() : 445;
@@ -89,16 +76,16 @@ function show(){
 	var bdheight = ($(window).height() - $('#bd').height()) / 2 - 20;
 	$('#bd').css('padding-top', bdheight);
 	$(window).resize(function(e) {
-        var height = $(window).height() > 445 ? $(window).height() : 445;
+		var height = $(window).height() > 445 ? $(window).height() : 445;
 		$("#container").height(height);
 		var bdheight = ($(window).height() - $('#bd').height()) / 2 - 20;
 		$('#bd').css('padding-top', bdheight);
-    });
+	});
 	$('select').select();
-	
+
 	/* $('.loginButton').click(function(e) {
-        document.location.href = "main.html";
-    }); */
+	    document.location.href = "main.html";
+	}); */
 </script>
 
 </html>

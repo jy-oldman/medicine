@@ -8,6 +8,7 @@
 <link rel="stylesheet" type="text/css" href="/css/WdatePicker.css" />
 <link rel="stylesheet" type="text/css" href="/css/skin_/table.css" />
 <link rel="stylesheet" type="text/css" href="/css/jquery.grid.css" />
+<link rel="stylesheet" type="text/css" href="/css/newCss/newCss.css" />
 <script type="text/javascript" src="/js/jquery.js"></script>
 <script type="text/javascript" src="/js/global.js"></script>
 <script type="text/javascript" src="/js/jquery.select.js"></script>
@@ -76,11 +77,17 @@
 											}
 											$("#user").append(div);
 										});
-						var page = "<span class='current prev'>&lt;</span><a href='javascript:;' onclick='toUserByPage(1)'>首页</a> <a href='javascript:;' onclick='toUserByPage("
+						var page = "<div id='pagediv'><div>总记录数： <i>"
+								+ data.rowCount
+								+ "</i></div><div>总页数： <i>"
+								+ data.pageCount
+								+ "</i></div><div style='margin-right: 30px;'>当前页： <i>"
+								+ data.pageIndex
+								+ "</i></div></div><span class='current prev'>&lt;</span><a href='javascript:;' onclick='toDataByPage(1)'>首页</a> <a href='javascript:;' onclick='toDataByPage("
 								+ data.prePage
-								+ ")'>上一页</a><a href='javascript:;' onclick='toUserByPage("
+								+ ")'>上一页</a><a href='javascript:;' onclick='toDataByPage("
 								+ data.nextPage
-								+ ")'>下一页</a><a href='javascript:;' onclick='toUserByPage("
+								+ ")'>下一页</a><a href='javascript:;' onclick='toDataByPage("
 								+ data.pageCount
 								+ ")'>末页</a><span class='current next'>&gt;</span>";
 						$("#page").append(page);
@@ -156,12 +163,18 @@
 													}
 													$("#user").append(div);
 												});
-								var page = "<span class='current prev'>&lt;</span><a href='javascript:;' onclick='toUserByPage(1)'>首页</a> <a href='javascript:;' onclick='toUserByPage("
-										+ data.prePage
-										+ ")'>上一页</a><a href='javascript:;' onclick='toUserByPage("
-										+ data.nextPage
-										+ ")'>下一页</a><a href='javascript:;' onclick='toUserByPage("
-										+ data.pageCount
+								var page = "<div id='pagediv'><div>总记录数： <i>"
+										+ data.user.rowCount
+										+ "</i></div><div>总页数： <i>"
+										+ data.user.pageCount
+										+ "</i></div><div style='margin-right: 30px;'>当前页： <i>"
+										+ data.user.pageIndex
+										+ "</i></div></div><span class='current prev'>&lt;</span><a href='javascript:;' onclick='toDataByPage(1)'>首页</a> <a href='javascript:;' onclick='toDataByPage("
+										+ data.user.prePage
+										+ ")'>上一页</a><a href='javascript:;' onclick='toDataByPage("
+										+ data.user.nextPage
+										+ ")'>下一页</a><a href='javascript:;' onclick='toDataByPage("
+										+ data.user.pageCount
 										+ ")'>末页</a><span class='current next'>&gt;</span>";
 								$("#page").append(page);
 								$("#all").prop("checked", false);
@@ -171,7 +184,7 @@
 		}
 	}
 
-	function toUserByPage(pageIndex) {
+	function toDataByPage(pageIndex) {
 		var level = $("#level").val();
 		$
 				.ajax({
@@ -220,11 +233,17 @@
 											}
 											$("#user").append(div);
 										});
-						var page = "<span class='current prev'>&lt;</span><a href='javascript:;' onclick='toUserByPage(1)'>首页</a> <a href='javascript:;' onclick='toUserByPage("
+						var page = "<div id='pagediv'><div>总记录数： <i>"
+								+ data.rowCount
+								+ "</i></div><div>总页数： <i>"
+								+ data.pageCount
+								+ "</i></div><div style='margin-right: 30px;'>当前页： <i>"
+								+ data.pageIndex
+								+ "</i></div></div><span class='current prev'>&lt;</span><a href='javascript:;' onclick='toDataByPage(1)'>首页</a> <a href='javascript:;' onclick='toDataByPage("
 								+ data.prePage
-								+ ")'>上一页</a><a href='javascript:;' onclick='toUserByPage("
+								+ ")'>上一页</a><a href='javascript:;' onclick='toDataByPage("
 								+ data.nextPage
-								+ ")'>下一页</a><a href='javascript:;' onclick='toUserByPage("
+								+ ")'>下一页</a><a href='javascript:;' onclick='toDataByPage("
 								+ data.pageCount
 								+ ")'>末页</a><span class='current next'>&gt;</span>";
 						$("#page").append(page);
@@ -291,10 +310,8 @@
 										onclick="checkOne()" class="checkboxes" /></td>
 									<td th:text="${user.id}"></td>
 									<td th:text="${user.username}"></td>
-									<span th:switch="${user.level}">
-										<td th:case="1">管理员</td>
-										<td th:case="2">操作员</td>
-									</span>
+									<td th:each="c:${level}" th:if="${c.levelno} eq ${user.level}"
+										th:text="${c.levelname}"></td>
 									<td
 										th:text="${#dates.format(user.createtime,'yyyy-MM-dd HH:mm:ss')}"></td>
 									<td><a th:href="@{getUpdate(id=${user.id})}">编辑</a>&nbsp;&nbsp;
@@ -303,15 +320,26 @@
 							</tbody>
 						</table>
 					</div>
-					<div class="pagination" id="page">
+					<div class="pagination" id="page" style="float: right;">
+						<div id="pagediv">
+							<div>
+								总记录数： <i th:text="${user.rowCount}"></i>
+							</div>
+							<div>
+								总页数： <i th:text="${user.pageCount}"></i>
+							</div>
+							<div style="margin-right: 30px;">
+								当前页： <i th:text="${user.pageIndex}"></i>
+							</div>
+						</div>
 						<span class="current prev">&lt;</span><a href="javascript:;"
-							th:onclick="|javascript:toUserByPage(1)|">首页</a> <a
+							th:onclick="|javascript:toDataByPage(1)|">首页</a> <a
 							href="javascript:;"
-							th:onclick="|javascript:toUserByPage(${user.prePage})|">上一页</a><a
+							th:onclick="|javascript:toDataByPage(${user.prePage})|">上一页</a><a
 							href="javascript:;"
-							th:onclick="|javascript:toUserByPage(${user.nextPage})|">下一页</a><a
+							th:onclick="|javascript:toDataByPage(${user.nextPage})|">下一页</a><a
 							href="javascript:;"
-							th:onclick="|javascript:toUserByPage(${user.pageCount})|">末页</a>
+							th:onclick="|javascript:toDataByPage(${user.pageCount})|">末页</a>
 						<span class="current next">&gt;</span>
 						<!-- <div class="pxofy">暂时无数据可以显示</div> -->
 					</div>

@@ -29,11 +29,9 @@
 			type_id = "";
 		}
 		var factory = $("#factory").val();
-		var minprice = $("#minprice").val();
-		var maxprice = $("#maxprice").val();
 		$
 				.ajax({
-					url : "selectMed",
+					url : "stock/selectMed",
 					type : "post",
 					dataType : "json",
 					data : {
@@ -41,8 +39,7 @@
 						med_no : med_no,
 						type_id : type_id,
 						factory : factory,
-						minprice : minprice,
-						maxprice : maxprice
+						type : "require"
 					},
 					success : function(data) {
 						$("#data").html("");
@@ -71,11 +68,9 @@
 													+ value.med_count
 													+ "</td><td>"
 													+ value.req_count
-													+ "</td><td><img src="+value.picture+" style='width: 30px; height: 30px;' /></td><td><a href='#' onclick='buyData("
+													+ "</td><td><img src="+value.picture+" style='width: 30px; height: 30px;' /></td><td><a href='#' onclick='updateData("
 													+ value.id
-													+ ")'>进货</a>&nbsp;&nbsp;<a href='#' onclick='updateData("
-													+ value.id
-													+ ")'>编辑</a>&nbsp;&nbsp; <a href='#' onclick='delData("
+													+ ")'>修改需求</a>&nbsp;&nbsp; <a href='#' onclick='delData("
 													+ value.id
 													+ ")'>删除</a></td></tr>");
 											$("#data").append(div);
@@ -120,7 +115,7 @@
 			if (confirm("确定要删除吗？")) {
 				$
 						.ajax({
-							url : 'med/delData',
+							url : 'stock/delData',
 							type : 'post',
 							dataType : 'json',
 							data : {
@@ -155,11 +150,9 @@
 															+ value.med_count
 															+ "</td><td>"
 															+ value.req_count
-															+ "</td><td><img src="+value.picture+" style='width: 30px; height: 30px;' /></td><td><a href='#' onclick='buyData("
+															+ "</td><td><img src="+value.picture+" style='width: 30px; height: 30px;' /></td><td><a href='#' onclick='updateData("
 															+ value.id
-															+ ")'>进货</a>&nbsp;&nbsp;<a href='#' onclick='updateData("
-															+ value.id
-															+ ")'>编辑</a>&nbsp;&nbsp; <a href='#' onclick='delData("
+															+ ")'>修改需求</a>&nbsp;&nbsp; <a href='#' onclick='delData("
 															+ value.id
 															+ ")'>删除</a></td></tr>");
 													$("#data").append(div);
@@ -188,7 +181,7 @@
 	function toDataByPage(pageIndex) {
 		$
 				.ajax({
-					url : "med/toDataByPage",
+					url : "stock/toDataByPage1",
 					type : "post",
 					dataType : "json",
 					data : {
@@ -221,11 +214,9 @@
 													+ value.med_count
 													+ "</td><td>"
 													+ value.req_count
-													+ "</td><td><img src="+value.picture+" style='width: 30px; height: 30px;' /></td><td><a href='#' onclick='buyData("
+													+ "</td><td><img src="+value.picture+" style='width: 30px; height: 30px;' /></td><td><a href='#' onclick='updateData("
 													+ value.id
-													+ ")'>进货</a>&nbsp;&nbsp;<a href='#' onclick='updateData("
-													+ value.id
-													+ ")'>编辑</a>&nbsp;&nbsp; <a href='#' onclick='delData("
+													+ ")'>修改需求</a>&nbsp;&nbsp; <a href='#' onclick='delData("
 													+ value.id
 													+ ")'>删除</a></td></tr>");
 											$("#data").append(div);
@@ -249,7 +240,7 @@
 	}
 </script>
 
-<title>药品信息管理</title>
+<title>药品需求管理</title>
 </head>
 
 <body>
@@ -299,26 +290,6 @@
 									style="width: auto" />
 							</div>
 						</div>
-
-						<div class="kv-item ue-clear"
-							style="width: 270px; float: left; margin-right: 100px">
-							<label>最低价:</label>
-							<div class="kv-item-content">
-								<input type="text" id="minprice" name="minprice"
-									oninput="value=value.replace(/[^\d\.]/g,'')"
-									style="width: auto" />
-							</div>
-						</div>
-
-						<div class="kv-item ue-clear"
-							style="width: 270px; float: left; margin-right: 100px">
-							<label>最高价:</label>
-							<div class="kv-item-content">
-								<input type="text" id="maxprice" name="maxprice"
-									oninput="value=value.replace(/[^\d\.]/g,'')"
-									style="width: auto" />
-							</div>
-						</div>
 					</div>
 					<div class="search-button" style="float: right;">
 						<input style="width: 90px; height: 31px; line-height: 31px;"
@@ -328,10 +299,9 @@
 
 				<div class="table">
 					<div class="opt ue-clear">
-						<span class="optarea"> <a href="toAddMed" class="add">
-								<i class="icon"></i> <span class="text">添加</span>
-						</a> <a href="javascript:;" onclick="delData()" class="delete"> <i
-								class="icon"></i> <span class="text">删除</span>
+						<span class="optarea"> <a href="javascript:;"
+							onclick="delData()" class="delete"> <i class="icon"></i> <span
+								class="text">删除</span>
 						</a>
 						</span>
 					</div>
@@ -370,9 +340,9 @@
 									<td th:text="${c.req_count}"></td>
 									<td><img th:src="${c.picture}"
 										style="width: 30px; height: 30px;" /></td>
-									<td><a href="#" th:onclick="|javascript:buyData(${c.id})|">进货</a>&nbsp;&nbsp;<a
-										href="#" th:onclick="|javascript:updateData(${c.id})|">编辑</a>&nbsp;&nbsp;
-										<a href="#" th:onclick="|javascript:delData(${c.id})|">删除</a></td>
+									<td><a href="#"
+										th:onclick="|javascript:updateData(${c.id})|">修改需求</a>&nbsp;&nbsp;<a
+										href="#" th:onclick="|javascript:delData(${c.id})|">删除</a></td>
 								</tr>
 							</tbody>
 						</table>
@@ -413,72 +383,21 @@
 				<input type="hidden" id="medId" name="id" />
 				<div style="margin-top: 20px">
 					<label style="float: left;">药品名称</label> <input type="text"
-						name="med_name" id="updatename" style="margin-left: 10px" />
-				</div>
-				<div style="margin-top: 20px">
-					<label style="float: left; margin-right: 10px;">药品种类</label> <select
-						style="width: 100px;" id="updatetype" name="type_id">
-						<option th:each="c:${medType}" th:value="${c.id}"
-							th:text="${c.typename}"></option>
-					</select>
+						name="med_name" id="updatename" readonly="readonly"
+						style="margin-left: 10px" />
 				</div>
 				<div style="margin-top: 20px">
 					<label style="float: left;">药品编码</label> <input type="text"
-						name="med_no" id="updatemedno" style="margin-left: 10px" />
+						name="med_no" id="updatemedno" readonly="readonly"
+						style="margin-left: 10px" />
 				</div>
 				<div style="margin-top: 20px">
-					<label style="float: left;">生产厂家</label> <input type="text"
-						name="factory" id="updatefactory" style="margin-left: 10px" />
-				</div>
-				<div style="margin-top: 20px">
-					<label style="float: left;">药品价格</label> <input type="text"
-						name="price" id="updateprice" style="margin-left: 10px"
-						oninput="value=value.replace(/[^\d\.]/g,'')" />
-				</div>
-				<div style="margin-top: 20px;">
-					<label style="float: left;">药品描述</label>
-					<textarea rows="" cols="22" style="margin-left: 10px"
-						name="description" id="description"></textarea>
-				</div>
-				<div style="margin-top: 20px;">
-					<label style="float: left;">图片</label> <input type="file"
-						id="picture" name="attach_pic" style="margin-left: 10px"></input>
+					<label style="float: left; margin-right: 26px">需求</label> <input
+						type="text" name="req_count" id="req_count"
+						oninput="value=value.replace(/[^\d]/g,'')"
+						style="margin-left: 10px;" />
 				</div>
 				<div class="buttons" style="margin-top: 20px">
-					<input style="margin-right: 150px" type="button"
-						class="button long2 ok" value="确定" /> <input type="button"
-						class="button long2 normal" value="取消" />
-				</div>
-			</form>
-		</div>
-	</div>
-
-	<div class="exitDialog" id="buyData">
-		<div class="content">
-			<form id="buyMed" method="post" style="margin-left: 20px"
-				enctype="multipart/form-data">
-				<input type="hidden" id="buyId" name="id" />
-				<div style="margin-top: 20px">
-					<label style="float: left;">药品名称</label> <input type="text"
-						name="med_name" id="buyname" readonly="readonly"
-						style="margin-left: 10px" />
-				</div>
-				<div style="margin-top: 20px">
-					<label style="float: left;">药品编码</label> <input type="text"
-						name="med_no" id="buymedno" readonly="readonly"
-						style="margin-left: 10px" />
-				</div>
-				<div style="margin-top: 20px">
-					<label style="float: left;">进货数量</label> <input type="text"
-						name="req_count" id="req_count"
-						oninput="value=value.replace(/[^\d]/g,'')"
-						style="margin-left: 10px; float: left;" />
-					<div style="float: left; margin-left: 5px; color: red;">
-						<label style="float: left;">目前库存：</label>
-						<p id="med_count" style="float: left;"></p>
-					</div>
-				</div>
-				<div class="buttons" style="margin-top: 20px; float: left;">
 					<input style="margin-right: 150px" type="button"
 						class="button long2 ok" value="确定" /> <input type="button"
 						class="button long2 normal" value="取消" />
@@ -491,14 +410,7 @@
 <script type="text/javascript" src="/js/jquery.dialog.js"></script>
 <script type="text/javascript">
 	$('#updateData').Dialog({
-		title : '修改药品信息',
-		autoOpen : false,
-		width : 400,
-		height : 450
-	});
-
-	$('#buyData').Dialog({
-		title : '进货',
+		title : '修改需求',
 		autoOpen : false,
 		width : 400,
 		height : 200
@@ -516,108 +428,27 @@
 			success : function(data) {
 				$("#medId").val(data.data.id);
 				$("#updatename").val(data.data.med_name);
-				$("#updatetype").val(data.data.type_id);
 				$("#updatemedno").val(data.data.med_no);
-				$("#updatefactory").val(data.data.factory);
-				$("#updateprice").val(data.data.price);
-				$("#description").val(data.data.description);
+				$("#req_count").val(data.data.req_count);
 			}
 		});
 	}
 
-	$('#updateData input[type=button]').click(
-			function(e) {
-				if ($(this).hasClass('ok')) {
-					var medId = $("#medId").val();
-					var updatename = $("#updatename").val();
-					var updatetype = $("#updatetype").val();
-					var updatemedno = $("#updatemedno").val();
-					var updatefactory = $("#updatefactory").val();
-					var updateprice = $("#updateprice").val();
-					var description = $("#description").val();
-					var picture = $("#picture").val();
-					if (updatename != "" && updatemedno != ""
-							&& updatefactory != "" && updateprice != ""
-							&& description != "") {
-						if (confirm("确定修改吗？")) {
-							var isExist = true;
-							$.ajax({
-								url : "med/isExist",
-								type : "post",
-								dataType : "json",
-								data : {
-									id : medId,
-									med_no : updatemedno
-								},
-								async : false,
-								success : function(msg) {
-									if (msg == false) {
-										alert("药品编码已存在！");
-										isExist = false;
-									}
-								}
-							});
-							if (isExist) {
-								$.ajax({
-									url : "updateMed",
-									type : "post",
-									dataType : "json",
-									data : new FormData($("#updateMed")[0]),
-									processData : false,
-									contentType : false,
-									async : false,
-									success : function(msg) {
-										alert(msg.error);
-										$('#updateData').Dialog('close');
-										getMed();
-									}
-								});
-							} else {
-								return false;
-							}
-						}
-					} else {
-						alert("请填写完整信息！");
-						return false;
-					}
-				} else {
-					$('#updateData').Dialog('close');
-				}
-			});
-	function buyData(id) {
-		$('#buyData').Dialog('open');
-		$.ajax({
-			url : 'toUpdateMed',
-			type : 'post',
-			dataType : 'json',
-			data : {
-				id : id
-			},
-			success : function(data) {
-				$("#buyId").val(data.data.id);
-				$("#buyname").val(data.data.med_name);
-				$("#buymedno").val(data.data.med_no);
-				$("#med_count").html(data.data.med_count);
-			}
-		});
-	}
-
-	$('#buyData input[type=button]').click(function() {
+	$('#updateData input[type=button]').click(function() {
 		if ($(this).hasClass('ok')) {
-			var medId = $("#buyId").val();
 			var reqcount = $("#req_count").val();
 			if (reqcount != "") {
 				$.ajax({
-					url : "buyMed",
+					url : "updateReqCount",
 					type : "post",
 					dataType : "json",
-					data : new FormData($("#buyMed")[0]),
+					data : new FormData($("#updateMed")[0]),
 					processData : false,
 					contentType : false,
 					async : false,
 					success : function(msg) {
 						alert(msg.error);
-						$('#buyData').Dialog('close');
+						$('#updateData').Dialog('close');
 						getMed();
 					}
 				});
@@ -626,13 +457,13 @@
 				return false;
 			}
 		} else {
-			$('#buyData').Dialog('close');
+			$('#updateData').Dialog('close');
 		}
 	})
 	function getMed() {
 		$
 				.ajax({
-					url : 'getMed',
+					url : 'stock/getMed',
 					type : 'post',
 					dataType : 'json',
 					success : function(data) {
@@ -662,11 +493,9 @@
 													+ value.med_count
 													+ "</td><td>"
 													+ value.req_count
-													+ "</td><td><img src="+value.picture+" style='width: 30px; height: 30px;' /></td><td><a href='#' onclick='buyData("
+													+ "</td><td><img src="+value.picture+" style='width: 30px; height: 30px;' /></td><td><a href='#' onclick='updateData("
 													+ value.id
-													+ ")'>进货</a>&nbsp;&nbsp;<a href='#' onclick='updateData("
-													+ value.id
-													+ ")'>编辑</a>&nbsp;&nbsp; <a href='#' onclick='delData("
+													+ ")'>修改需求</a>&nbsp;&nbsp; <a href='#' onclick='delData("
 													+ value.id
 													+ ")'>删除</a></td></tr>");
 											$("#data").append(div);

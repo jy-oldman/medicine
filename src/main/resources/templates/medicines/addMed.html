@@ -21,21 +21,25 @@
 <script type="text/javascript" src="umeditor/lang/zh-cn/zh-cn.js"></script>
 <script type="text/javascript">
 	function isExist() {
-		var name = $("#typename").val();
+		var name = $("#med_name").val();
+		var med_no = $("#med_no").val();
+		var factory = $("#factory").val();
+		var price = $("#price").val();
 		var description = $("#description").val();
-		if (name != "" && description != "") {
+		if (name != "" && med_no != "" && factory != "" && price != ""
+				&& description != "") {
 			var isExist = true;
 			$.ajax({
 				url : "med/isExist",
 				type : "post",
 				dataType : "json",
 				data : {
-					typename : name
+					med_no : med_no
 				},
 				async : false,
 				success : function(msg) {
 					if (msg == false) {
-						alert("药品名称已存在！");
+						alert("药品编码已存在！");
 						isExist = false;
 					} else {
 						isExist = true;
@@ -129,10 +133,4 @@
 		</div>
 	</div>
 </body>
-
-<!-- <script type="text/javascript">
-	$('select').select();
-	showRemind('input[type=text],textarea', 'color5');
-	UM.getEditor('content');
-</script> -->
 </html>

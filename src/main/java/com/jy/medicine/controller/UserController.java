@@ -36,6 +36,7 @@ public class UserController {
 		} else {
 			model.addAttribute("user", user1);
 			session.setAttribute("level", user1.getLevel());
+			session.setAttribute("userId", user1.getId());
 			return "main";
 		}
 	}
@@ -183,5 +184,4 @@ public class UserController {
 	public void delSession(String session, HttpSession session2) {
 		session2.removeAttribute(session);
 	}
-
 }

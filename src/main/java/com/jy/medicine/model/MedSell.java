@@ -14,7 +14,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
  */
 public class MedSell {
 	private int id;// 药品销售ID
-	private int med_id;// 药品ID
+	private String sellno;// 交易单号
+	private String med_id;// 药品编码
 	private int user_id;// 操作员ID
 	private String sellname;// 药品名称
 	private double sellprice;// 药品价格
@@ -31,11 +32,19 @@ public class MedSell {
 		this.id = id;
 	}
 
-	public int getMed_id() {
+	public String getSellno() {
+		return sellno;
+	}
+
+	public void setSellno(String sellno) {
+		this.sellno = sellno;
+	}
+
+	public String getMed_id() {
 		return med_id;
 	}
 
-	public void setMed_id(int med_id) {
+	public void setMed_id(String med_id) {
 		this.med_id = med_id;
 	}
 

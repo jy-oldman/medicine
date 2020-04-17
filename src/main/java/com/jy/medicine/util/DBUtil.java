@@ -46,7 +46,7 @@ public class DBUtil {
 	 *            文件路径
 	 * @return
 	 */
-	public  static String upLoadFile(MultipartFile imFile) {
+	public static String upLoadFile(MultipartFile imFile) {
 		String img = "";
 		String oldName = imFile.getOriginalFilename();
 		File file = null;
@@ -73,8 +73,8 @@ public class DBUtil {
 		}
 		return img;
 	}
-	
-	public static Paging getPaging(Paging paging,List<?> list,Map<String, Object> map) {
+
+	public static Paging getPaging(Paging paging, List<?> list, Map<String, Object> map) {
 		// 取出总记录数
 		int rowCount = (int) map.get("rowCount");
 		// 取出总页数

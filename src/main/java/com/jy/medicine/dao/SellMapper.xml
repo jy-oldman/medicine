@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jy.medicine.dao.SellMapper">
+	<select id="getAllMed" parameterType="Map" resultType="MedTypeVO"
+		statementType="CALLABLE">
+		{call pro_Paging(
+		#{tableName,mode=IN,jdbcType=VARCHAR},
+		#{clumn,mode=IN,jdbcType=VARCHAR},
+		#{tiaojian,mode=IN,jdbcType=VARCHAR},
+		#{pageIndex,mode=IN,jdbcType=INTEGER},
+		#{pageSize,mode=IN,jdbcType=INTEGER},
+		#{pageCount,mode=OUT,jdbcType=INTEGER},
+		#{rowCount,mode=OUT,jdbcType=INTEGER})}
+	</select>
+	<insert id="pay" parameterType="MedSell">
+		insert into
+		med_sell(sellno,med_id,user_id,sellname,sellprice,sellcount,selltime)
+		values(#{sellno},#{med_id},#{user_id},#{sellname},#{sellprice},#{sellcount},#{selltime})
+	</insert>
+
+	<select id="getMedByMedNo" parameterType="String" resultType="Medicine">
+		select * from medicine where med_no=#{medNo}
+	</select>
+
+	<update id="updateMedCount" parameterType="MedSell">
+		update medicine set
+		med_count=med_count-#{sellcount} where med_no=#{med_id}
+	</update>
+
+	<select id="getAllSell" parameterType="Map" resultType="MedSell"
+		statementType="CALLABLE">
+		{call pro_Paging(
+		#{tableName,mode=IN,jdbcType=VARCHAR},
+		#{clumn,mode=IN,jdbcType=VARCHAR},
+		#{tiaojian,mode=IN,jdbcType=VARCHAR},
+		#{pageIndex,mode=IN,jdbcType=INTEGER},
+		#{pageSize,mode=IN,jdbcType=INTEGER},
+		#{pageCount,mode=OUT,jdbcType=INTEGER},
+		#{rowCount,mode=OUT,jdbcType=INTEGER})}
+	</select>
+
+	<select id="getAllUser" resultType="Users">
+		select * from users
+	</select>
+
+</mapper>

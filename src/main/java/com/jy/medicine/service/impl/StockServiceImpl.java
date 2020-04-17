@@ -8,18 +8,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.jy.medicine.dao.MedicineMapper;
-import com.jy.medicine.model.MedType;
+import com.jy.medicine.dao.StockMapper;
 import com.jy.medicine.model.MedTypeVO;
 import com.jy.medicine.model.Medicine;
-import com.jy.medicine.service.MedicineService;
+import com.jy.medicine.service.StockService;
 import com.jy.medicine.util.DBUtil;
 import com.jy.medicine.util.Paging;
 
-@Service("medicineService")
-public class MedicineServiceImpl implements MedicineService {
+@Service("stockService")
+public class StockServiceImpl implements StockService {
 	@Autowired
-	MedicineMapper medicineMapper;
+	StockMapper stockMapper;
 
 	@Override
 	public Paging getAllMedicines(Paging paging) {
@@ -27,9 +26,9 @@ public class MedicineServiceImpl implements MedicineService {
 		paging.setTableName("medicine a,med_type b");
 		paging.setClumn("a.*,b.typename");
 		if (paging.getTiaojian() == null) {
-			paging.setTiaojian(" a.type_id=b.id ");
+			paging.setTiaojian(" a.type_id=b.id and req_count>0 ");
 		} else {
-			paging.setTiaojian(" a.type_id=b.id " + paging.getTiaojian());
+			paging.setTiaojian(" a.type_id=b.id and req_count>0 " + paging.getTiaojian());
 		}
 		paging.setPageSize(5);
 		map.put("tableName", paging.getTableName());
@@ -37,50 +36,25 @@ public class MedicineServiceImpl implements MedicineService {
 		map.put("tiaojian", paging.getTiaojian());
 		map.put("pageIndex", paging.getPageIndex());
 		map.put("pageSize", paging.getPageSize());
-		List<MedTypeVO> list = medicineMapper.getAllMedicines(map);
+		List<MedTypeVO> list = stockMapper.getAllRequire(map);
 		return DBUtil.getPaging(paging, list, map);
 	}
 
 	@Override
-	public List<MedType> getMedType() {
-		return medicineMapper.getMedType();
-	}
-
-	@Override
-	public int addMed(Medicine medicine) {
-		return medicineMapper.addMed(medicine);
-	}
-
-	@Override
-	public Medicine getMed(Medicine medicine) {
-		return medicineMapper.getMed(medicine);
-	}
-
-	@Override
-	public Medicine getMedByMedNo(String medNo) {
-		return medicineMapper.getMedByMedNo(medNo);
-	}
-
-	@Override
-	public Medicine getMedById(String id) {
-		return medicineMapper.getMedById(id);
-	}
-
-	@Override
-	public int updateMedById(Medicine medicine) {
-		return medicineMapper.updateMedById(medicine);
+	public int updateReqCount(Medicine medicine) {
+		return stockMapper.updateReqCount(medicine);
 	}
 
 	@Override
 	@Transactional
-	public int delMedById(String id, String type) {
+	public int delReqCount(String id, String type) {
 		if ("alone".equals(type)) {
-			return medicineMapper.delMedById(Integer.parseInt(id));
+			return stockMapper.delReqCount(Integer.parseInt(id));
 		} else {
 			int result = 0;
 			String[] id1 = id.substring(0, id.length() - 1).split(",");
 			for (String string : id1) {
-				result = medicineMapper.delMedById(Integer.parseInt(string));
+				result = stockMapper.delReqCount(Integer.parseInt(string));
 				if (result > 0) {
 					result = 0;
 				} else {
@@ -97,7 +71,8 @@ public class MedicineServiceImpl implements MedicineService {
 	}
 
 	@Override
-	public int buyMed(Medicine medicine) {
-		return medicineMapper.buyMed(medicine);
+	public int buyData(Medicine medicine) {
+		return stockMapper.buyData(medicine);
 	}
+
 }

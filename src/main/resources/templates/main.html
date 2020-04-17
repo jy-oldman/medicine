@@ -14,34 +14,35 @@
 
 <body>
 	<div id="container">
-		<div id="hd">
+		<div id="hd" style="height: auto;">
 			<div class="hd-top">
 				<h1 class="logo">
 					<a href="javascript:;" class="logo-icon"></a>
 				</h1>
 				<div class="user-info" style="width: auto;">
-					<a href="javascript:;" class="user-avatar"><span><i
-							class="info-num">2</i><img th:src="${user.photo}" alt="头像"
+					<a href="javascript:;" class="user-avatar"><span><img
+							th:src="${user.photo}" alt="头像"
 							style="width: 38px; height: 38px; border-radius: 50%; margin-left: -2px; margin-top: -2px;" /></span></a>
-					<span class="user-name" th:text="${user.username}"></span> <a
-						href="javascript:;" class="more-info"></a>
+					<span class="user-name" th:text="${user.username}"></span>
+					<!-- <a
+						href="javascript:;" class="more-info"></a> -->
 				</div>
 				<div class="setting ue-clear">
-					<div class="setting-skin">
+					<!-- <div class="setting-skin">
 						<div class="switch-bar">
 							<i class="skin-icon"></i> <span class="text">皮肤</span> <i
 								class="arrow-icon"></i>
 						</div>
-					</div>
-					<ul class="setting-main ue-clear">
-						<li><a href="javascript:;">桌面</a></li>
+					</div> -->
+					<ul class="setting-main ue-clear" style="width: auto;">
+						<!-- <li><a href="javascript:;">桌面</a></li>
 						<li><a href="javascript:;">设置</a></li>
-						<li><a href="javascript:;">帮助</a></li>
+						<li><a href="javascript:;">帮助</a></li> -->
 						<li><a href="javascript:;" class="close-btn exit"></a></li>
 					</ul>
 				</div>
 			</div>
-			<div class="hd-bottom">
+			<!-- <div class="hd-bottom">
 				<i class="home"><a href="javascript:;"></a></i>
 				<div class="nav-wrap">
 					<ul class="nav ue-clear">
@@ -54,19 +55,13 @@
 						<li><a href="javascript:;">交流中心</a></li>
 						<li><a href="javascript:;">企业邮箱</a></li>
 						<li><a href="javascript:;">个人设置</a></li>
-						<li><a href="javascript:;">交流中心</a></li>
-						<li><a href="javascript:;">企业邮箱</a></li>
-						<li><a href="javascript:;">个人设置</a></li>
-						<li><a href="javascript:;">交流中心</a></li>
-						<li><a href="javascript:;">企业邮箱</a></li>
-						<li><a href="javascript:;">个人设置</a></li>
 					</ul>
 				</div>
 				<div class="nav-btn">
 					<a href="javascript:;" class="nav-prev-btn"></a> <a
 						href="javascript:;" class="nav-next-btn"></a>
 				</div>
-			</div>
+			</div> -->
 		</div>
 		<div id="bd">
 			<iframe width="100%" height="100%" id="mainIframe" src="/nav"
@@ -75,10 +70,8 @@
 
 		<div id="ft" class="ue-clear">
 			<div class="ft1 ue-clear">
-				<i class="ft-icon1"></i> <span>数字管理系统 More Templates <a
-					href="http://www.cssmoban.com/" target="_blank" title="模板之家">模板之家</a>
-					- Collect from <a href="http://www.cssmoban.com/" title="网页模板"
-					target="_blank">网页模板</a></span> <em>Digital Pertal</em>
+				<i class="ft-icon1"></i> <span>医药管理系统</span> <em>Medicine
+					Portal</em>
 			</div>
 			<div class="ft2 ue-clear">
 				<span>Call Center</span> <em>V2.0 2014</em> <i class="ft-icon2"></i>
@@ -105,10 +98,7 @@
 	<div class="opt-panel user-opt" style="top: 52px; left: 330px;">
 		<ul>
 			<li><a class="text">用户资料</a></li>
-			<li><a class="text">短消息<span class="num">(2)</span></a></li>
-			<li><a class="text">资料信息</a></li>
 			<li><a class="text">注销</a></li>
-			<li><a class="text">自定义</a></li>
 		</ul>
 		<div class="opt-panel-tl"></div>
 		<div class="opt-panel-tc"></div>
@@ -140,7 +130,7 @@
 		<div class="opt-panel-br"></div>
 	</div>
 
-	<div class="system-switch">
+	<!-- <div class="system-switch">
 		<ul>
 			<li><span class="system-name"><i></i>数字管理系统</span></li>
 			<li><span class="system-name"><i></i>网络信息管理系统</span></li>
@@ -151,7 +141,7 @@
 		<div class="opt-panel-mr"></div>
 		<div class="opt-panel-bc"></div>
 		<div class="opt-panel-br"></div>
-	</div>
+	</div> -->
 
 </body>
 <script type="text/javascript" src="/js/core.js"></script>

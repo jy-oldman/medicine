@@ -1,0 +1,317 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=emulateIE7" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="/css/style.css" />
+<link rel="stylesheet" type="text/css" href="/css/WdatePicker.css" />
+<link rel="stylesheet" type="text/css" href="/css/skin_/table.css" />
+<link rel="stylesheet" type="text/css" href="css/jquery.dialog.css" />
+<link rel="stylesheet" type="text/css" href="/css/jquery.grid.css" />
+<link rel="stylesheet" type="text/css" href="/css/newCss/newCss.css" />
+<script type="text/javascript" src="/js/jquery.js"></script>
+<script type="text/javascript" src="/js/global.js"></script>
+<script type="text/javascript" src="/js/jquery.select.js"></script>
+<script type="text/javascript" src="/js/core.js"></script>
+<script type="text/javascript" src="/js/jquery.pagination.js"></script>
+<script type="text/javascript" src="/js/jquery.grid.js"></script>
+<script type="text/javascript" src="/js/WdatePicker.js"></script>
+
+<script type="text/javascript" src="/js/newjs/medicine.js"></script>
+<script type="text/javascript">
+	function selectMed() {
+		var med_name = $("#med_name").val();
+		var med_no = $("#med_no").val();
+		var type_id = $("#type_id").val();
+		if (type_id == "all") {
+			type_id = "";
+		}
+		var factory = $("#factory").val();
+		var minprice = $("#minprice").val();
+		var maxprice = $("#maxprice").val();
+		var mincount = $("#mincount").val();
+		var maxcount = $("#maxcount").val();
+		$
+				.ajax({
+					url : "stock/selectMed",
+					type : "post",
+					dataType : "json",
+					data : {
+						med_name : med_name,
+						med_no : med_no,
+						type_id : type_id,
+						factory : factory,
+						minprice : minprice,
+						maxprice : maxprice,
+						mincount : mincount,
+						maxcount : maxcount
+					},
+					success : function(data) {
+						$("#data").html("");
+						$("#page").html("");
+						$
+								.each(
+										data.list,
+										function(index, value) {
+											var div = $("<tr><td><input type='checkbox' id='"
+													+ value.id
+													+ "' onclick='checkOne()' class='checkboxes' /></td><td>"
+													+ value.id
+													+ "</td><td>"
+													+ value.typename
+													+ "</td><td>"
+													+ value.med_no
+													+ "</td><td>"
+													+ value.med_name
+													+ "</td><td>"
+													+ value.factory
+													+ "</td><td>"
+													+ value.price
+													+ "</td><td>"
+													+ value.description
+													+ "</td><td>"
+													+ value.med_count
+													+ "</td><td>"
+													+ value.req_count
+													+ "</td><td><img src="+value.picture+" style='width: 30px; height: 30px;' /></td></tr>");
+											$("#data").append(div);
+										});
+						var page = "<div id='pagediv'><div>总记录数： <i>"
+								+ data.rowCount
+								+ "</i></div><div>总页数： <i>"
+								+ data.pageCount
+								+ "</i></div><div style='margin-right: 30px;'>当前页： <i>"
+								+ data.pageIndex
+								+ "</i></div></div><span class='current prev'>&lt;</span><a href='javascript:;' onclick='toDataByPage(1)'>首页</a> <a href='javascript:;' onclick='toDataByPage("
+								+ data.prePage
+								+ ")'>上一页</a><a href='javascript:;' onclick='toDataByPage("
+								+ data.nextPage
+								+ ")'>下一页</a><a href='javascript:;' onclick='toDataByPage("
+								+ data.pageCount
+								+ ")'>末页</a><span class='current next'>&gt;</span>";
+						$("#page").append(page);
+					}
+				});
+	}
+
+	function toDataByPage(pageIndex) {
+		$
+				.ajax({
+					url : "stock/toDataByPage",
+					type : "post",
+					dataType : "json",
+					data : {
+						pageIndex : pageIndex
+					},
+					success : function(data) {
+						$("#data").html("");
+						$("#page").html("");
+						$
+								.each(
+										data.list,
+										function(index, value) {
+											var div = $("<tr><td><input type='checkbox' id='"
+													+ value.id
+													+ "' onclick='checkOne()' class='checkboxes' /></td><td>"
+													+ value.id
+													+ "</td><td>"
+													+ value.typename
+													+ "</td><td>"
+													+ value.med_no
+													+ "</td><td>"
+													+ value.med_name
+													+ "</td><td>"
+													+ value.factory
+													+ "</td><td>"
+													+ value.price
+													+ "</td><td>"
+													+ value.description
+													+ "</td><td>"
+													+ value.med_count
+													+ "</td><td>"
+													+ value.req_count
+													+ "</td><td><img src="+value.picture+" style='width: 30px; height: 30px;' /></td></tr>");
+											$("#data").append(div);
+										});
+						var page = "<div id='pagediv'><div>总记录数： <i>"
+								+ data.rowCount
+								+ "</i></div><div>总页数： <i>"
+								+ data.pageCount
+								+ "</i></div><div style='margin-right: 30px;'>当前页： <i>"
+								+ data.pageIndex
+								+ "</i></div></div><span class='current prev'>&lt;</span><a href='javascript:;' onclick='toDataByPage(1)'>首页</a> <a href='javascript:;' onclick='toDataByPage("
+								+ data.prePage
+								+ ")'>上一页</a><a href='javascript:;' onclick='toDataByPage("
+								+ data.nextPage
+								+ ")'>下一页</a><a href='javascript:;' onclick='toDataByPage("
+								+ data.pageCount
+								+ ")'>末页</a><span class='current next'>&gt;</span>";
+						$("#page").append(page);
+					}
+				})
+	}
+</script>
+
+<title>库存信息查询</title>
+</head>
+
+<body>
+	<div id="container">
+		<div id="hd"></div>
+		<div id="bd">
+			<div id="main">
+				<input type="hidden" th:value="${session.error}" id="error"></input>
+				<div class="search-box ue-clear">
+					<div class="search-area">
+						<div class="kv-item ue-clear"
+							style="width: 270px; float: left; margin-right: 100px">
+							<label>药品名称:</label>
+							<div class="kv-item-content">
+								<input type="text" id="med_name" name="med_name"
+									style="width: auto" />
+							</div>
+						</div>
+
+
+
+						<div class="kv-item ue-clear"
+							style="width: 270px; float: left; margin-right: 100px">
+							<label>药品编码:</label>
+							<div class="kv-item-content">
+								<input type="text" id="med_no" name="med_no" style="width: auto" />
+							</div>
+						</div>
+
+						<div class="kv-item ue-clear"
+							style="width: 270px; float: left; margin-right: 100px">
+							<label>药品种类:</label>
+							<div class="kv-item-content">
+								<select style="width: 100px;" id="type_id">
+									<option value="all">全部</option>
+									<option th:each="c:${medType}" th:value="${c.id}"
+										th:text="${c.typename}"></option>
+								</select>
+							</div>
+						</div>
+
+						<div class="kv-item ue-clear"
+							style="width: 270px; float: left; margin-right: 100px">
+							<label>生产厂家:</label>
+							<div class="kv-item-content">
+								<input type="text" id="factory" name="factory"
+									style="width: auto" />
+							</div>
+						</div>
+
+						<div class="kv-item ue-clear"
+							style="width: 270px; float: left; margin-right: 100px">
+							<label>价格:</label>
+							<div class="kv-item-content">
+								<input type="text" id="minprice" name="minprice"
+									oninput="value=value.replace(/[^\d\.]/g,'')"
+									style="width: auto" />
+							</div>
+						</div>
+
+						<div class="kv-item ue-clear"
+							style="width: 270px; float: left; margin-right: 100px">
+							<label>---------:</label>
+							<div class="kv-item-content">
+								<input type="text" id="maxprice" name="maxprice"
+									oninput="value=value.replace(/[^\d\.]/g,'')"
+									style="width: auto" />
+							</div>
+						</div>
+
+						<div class="kv-item ue-clear"
+							style="width: 270px; float: left; margin-right: 100px">
+							<label>库存:</label>
+							<div class="kv-item-content">
+								<input type="text" id="mincount" name="mincount"
+									oninput="value=value.replace(/[^\d]/g,'')" style="width: auto" />
+							</div>
+						</div>
+
+						<div class="kv-item ue-clear"
+							style="width: 270px; float: left; margin-right: 100px">
+							<label>---------:</label>
+							<div class="kv-item-content">
+								<input type="text" id="maxcount" name="maxcount"
+									oninput="value=value.replace(/[^\d]/g,'')" style="width: auto" />
+							</div>
+						</div>
+					</div>
+					<div class="search-button" style="float: right;">
+						<input style="width: 90px; height: 31px; line-height: 31px;"
+							class="button" type="button" onclick="selectMed()" value="查询" />
+					</div>
+				</div>
+
+				<div class="table">
+					<div class="grid">
+						<table class="ui-table" width="100%">
+							<thead>
+								<tr>
+									<th width="3%"><input type="checkbox" id="all"
+										onclick="checkAll()" /></th>
+									<th width="5%">药品ID</th>
+									<th width="8%">药品种类</th>
+									<th width="8%">药品编码</th>
+									<th width="10%">药品名称</th>
+									<th width="8%">生产厂家</th>
+									<th width="6%">价格</th>
+									<th width="">描述</th>
+									<th width="6%">库存</th>
+									<th width="7%">需求数量</th>
+									<th width="5%">图片</th>
+								</tr>
+							</thead>
+							<tbody class="ui-table-tbody" id="data">
+								<tr th:each="c:${medicine.list}">
+									<td><input type="checkbox" th:id="${c.id}"
+										onclick="checkOne()" class="checkboxes" /></td>
+									<td th:text="${c.id}"></td>
+									<td th:text="${c.typename}"></td>
+									<td th:text="${c.med_no}"></td>
+									<td th:text="${c.med_name}"></td>
+									<td th:text="${c.factory}"></td>
+									<td th:text="${c.price}"></td>
+									<td th:text="${c.description}"></td>
+									<td th:text="${c.med_count}"></td>
+									<td th:text="${c.req_count}"></td>
+									<td><img th:src="${c.picture}"
+										style="width: 30px; height: 30px;" /></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="pagination" id="page" style="float: right;">
+						<div id="pagediv">
+							<div>
+								总记录数： <i th:text="${medicine.rowCount}"></i>
+							</div>
+							<div>
+								总页数： <i th:text="${medicine.pageCount}"></i>
+							</div>
+							<div style="margin-right: 30px;">
+								当前页： <i th:text="${medicine.pageIndex}"></i>
+							</div>
+						</div>
+						<span class="current prev">&lt;</span><a href="javascript:;"
+							th:onclick="|javascript:toDataByPage(1)|">首页</a> <a
+							href="javascript:;"
+							th:onclick="|javascript:toDataByPage(${medicine.prePage})|">上一页</a><a
+							href="javascript:;"
+							th:onclick="|javascript:toDataByPage(${medicine.nextPage})|">下一页</a><a
+							href="javascript:;"
+							th:onclick="|javascript:toDataByPage(${medicine.pageCount})|">末页</a>
+						<span class="current next">&gt;</span>
+						<!-- <div class="pxofy">暂时无数据可以显示</div> -->
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

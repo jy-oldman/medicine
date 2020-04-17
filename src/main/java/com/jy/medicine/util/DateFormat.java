@@ -18,7 +18,7 @@ public class DateFormat {
 	 * @param date
 	 * @return
 	 */
-	public Date dateFormat1(Date date) {
+	public static Date dateFormat1(Date date) {
 		String str = "yyyy-MM-dd HH:mm:ss";
 		SimpleDateFormat sdf = new SimpleDateFormat(str);
 		Date date2 = new Date();
@@ -36,9 +36,15 @@ public class DateFormat {
 	 * @param date
 	 * @return
 	 */
-	public String dateFormat2(Date date) {
+	public static Date dateFormat2(Date date) {
 		String str = "yyyy-MM-dd";
 		SimpleDateFormat sdf = new SimpleDateFormat(str);
-		return sdf.format(date);
+		Date date2 = new Date();
+		try {
+			date2 = sdf.parse(sdf.format(date));
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return date2;
 	}
 }

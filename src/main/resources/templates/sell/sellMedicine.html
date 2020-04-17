@@ -1,0 +1,527 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=emulateIE7" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="/css/style.css" />
+<link rel="stylesheet" type="text/css" href="/css/WdatePicker.css" />
+<link rel="stylesheet" type="text/css" href="/css/skin_/table.css" />
+<link rel="stylesheet" type="text/css" href="css/jquery.dialog.css" />
+<link rel="stylesheet" type="text/css" href="/css/jquery.grid.css" />
+<link rel="stylesheet" type="text/css" href="/css/newCss/newCss.css" />
+<script type="text/javascript" src="/js/jquery.js"></script>
+<script type="text/javascript" src="/js/global.js"></script>
+<script type="text/javascript" src="/js/jquery.select.js"></script>
+<script type="text/javascript" src="/js/core.js"></script>
+<script type="text/javascript" src="/js/jquery.pagination.js"></script>
+<script type="text/javascript" src="/js/jquery.grid.js"></script>
+<script type="text/javascript" src="/js/WdatePicker.js"></script>
+
+<script type="text/javascript" src="/js/newjs/medicine.js"></script>
+
+<script type="text/javascript">
+	function selectMed() {
+		var med_name = $("#med_name").val();
+		var med_no = $("#med_no").val();
+		var type_id = $("#type_id").val();
+		if (type_id == "all") {
+			type_id = "";
+		}
+		var factory = $("#factory").val();
+		$
+				.ajax({
+					url : "sell/selectMed",
+					type : "post",
+					dataType : "json",
+					data : {
+						med_name : med_name,
+						med_no : med_no,
+						type_id : type_id,
+						factory : factory
+					},
+					success : function(data) {
+						$("#data").html("");
+						$("#page").html("");
+						$
+								.each(
+										data.list,
+										function(index, value) {
+											var div = $("<tr><td><input type='checkbox' id='"
+													+ value.id
+													+ "' onclick='checkOne()' class='checkboxes' /></td><td>"
+													+ value.id
+													+ "</td><td>"
+													+ value.med_name
+													+ "</td><td>"
+													+ value.typename
+													+ "</td><td>"
+													+ value.price
+													+ "</td><td>"
+													+ value.factory
+													+ "</td><td>"
+													+ value.med_count
+													+ "</td><td><img src="+value.picture+" style='width: 30px; height: 30px;' /></td><td><a href='#' onclick='buyData("
+													+ value.id
+													+ ")'>购买</a></td></tr>");
+											$("#data").append(div);
+										});
+						var page = "<div id='pagediv'><div>总记录数： <i>"
+								+ data.rowCount
+								+ "</i></div><div>总页数： <i>"
+								+ data.pageCount
+								+ "</i></div><div style='margin-right: 30px;'>当前页： <i>"
+								+ data.pageIndex
+								+ "</i></div></div><span class='current prev'>&lt;</span><a href='javascript:;' onclick='toDataByPage(1)'>首页</a> <a href='javascript:;' onclick='toDataByPage("
+								+ data.prePage
+								+ ")'>上一页</a><a href='javascript:;' onclick='toDataByPage("
+								+ data.nextPage
+								+ ")'>下一页</a><a href='javascript:;' onclick='toDataByPage("
+								+ data.pageCount
+								+ ")'>末页</a><span class='current next'>&gt;</span>";
+						$("#page").append(page);
+					}
+				});
+	}
+
+	function delData(medId) {
+		$
+				.ajax({
+					url : 'sell/delData',
+					type : 'post',
+					dataType : 'json',
+					data : {
+						id : medId
+					},
+					success : function(data) {
+						$("#sellData").html("");
+						$
+								.each(
+										data.data.list,
+										function(index, value) {
+											var div = $("<tr><td style='display: none;'>"
+													+ value.med_id
+													+ "</td><td>"
+													+ value.sellname
+													+ "</td><td>"
+													+ value.sellprice
+													+ "</td><td><input type='number' onblur='updateMedCount(\""
+													+ value.med_id
+													+ "\",this.value)' style='width:100px' min='1' onkeypress='return (/[\d]/.test(String.fromCharCode(event.keyCode)))' class='sellCount' value='"
+													+ value.sellcount
+													+ "'></input></td><td>"
+													+ value.sellprice
+													* value.sellcount
+													+ "</td><td><a href='#' onclick='delData(\""
+													+ value.med_id
+													+ "\")'>删除</a></td></tr>");
+											$("#sellData").append(div);
+										});
+					}
+				})
+	}
+
+	function toDataByPage(pageIndex) {
+		$
+				.ajax({
+					url : "sell/toDataByPage",
+					type : "post",
+					dataType : "json",
+					data : {
+						pageIndex : pageIndex
+					},
+					success : function(data) {
+						$("#data").html("");
+						$("#page").html("");
+						$
+								.each(
+										data.list,
+										function(index, value) {
+											var div = $("<tr><td><input type='checkbox' id='"
+													+ value.id
+													+ "' onclick='checkOne()' class='checkboxes' /></td><td>"
+													+ value.id
+													+ "</td><td>"
+													+ value.med_name
+													+ "</td><td>"
+													+ value.typename
+													+ "</td><td>"
+													+ value.price
+													+ "</td><td>"
+													+ value.factory
+													+ "</td><td>"
+													+ value.med_count
+													+ "</td><td><img src="+value.picture+" style='width: 30px; height: 30px;' /></td><td><a href='#' onclick='buyData("
+													+ value.id
+													+ ")'>购买</a></td></tr>");
+											$("#data").append(div);
+										});
+						var page = "<div id='pagediv'><div>总记录数： <i>"
+								+ data.rowCount
+								+ "</i></div><div>总页数： <i>"
+								+ data.pageCount
+								+ "</i></div><div style='margin-right: 30px;'>当前页： <i>"
+								+ data.pageIndex
+								+ "</i></div></div><span class='current prev'>&lt;</span><a href='javascript:;' onclick='toDataByPage(1)'>首页</a> <a href='javascript:;' onclick='toDataByPage("
+								+ data.prePage
+								+ ")'>上一页</a><a href='javascript:;' onclick='toDataByPage("
+								+ data.nextPage
+								+ ")'>下一页</a><a href='javascript:;' onclick='toDataByPage("
+								+ data.pageCount
+								+ ")'>末页</a><span class='current next'>&gt;</span>";
+						$("#page").append(page);
+					}
+				})
+	}
+</script>
+
+<title>药品销售</title>
+</head>
+
+<body>
+	<div id="container">
+		<div id="hd"></div>
+		<div id="bd">
+			<div id="main">
+				<input type="hidden" th:value="${session.error}" id="error"></input>
+				<div class="search-box ue-clear">
+					<div class="search-area">
+						<div class="kv-item ue-clear"
+							style="width: 270px; float: left; margin-right: 100px">
+							<label>药品名称:</label>
+							<div class="kv-item-content">
+								<input type="text" id="med_name" name="med_name"
+									style="width: auto" />
+							</div>
+						</div>
+
+						<div class="kv-item ue-clear"
+							style="width: 270px; float: left; margin-right: 100px">
+							<label>药品编码:</label>
+							<div class="kv-item-content">
+								<input type="text" id="med_no" name="med_no" style="width: auto" />
+							</div>
+						</div>
+
+						<div class="kv-item ue-clear"
+							style="width: 270px; float: left; margin-right: 100px">
+							<label>药品种类:</label>
+							<div class="kv-item-content">
+								<select style="width: 100px;" id="type_id">
+									<option value="all">全部</option>
+									<option th:each="c:${medType}" th:value="${c.id}"
+										th:text="${c.typename}"></option>
+								</select>
+							</div>
+						</div>
+
+						<div class="kv-item ue-clear"
+							style="width: 270px; float: left; margin-right: 100px">
+							<label>生产厂家:</label>
+							<div class="kv-item-content">
+								<input type="text" id="factory" name="factory"
+									style="width: auto" />
+							</div>
+						</div>
+					</div>
+					<div class="search-button" style="float: right;">
+						<input style="width: 90px; height: 31px; line-height: 31px;"
+							class="button" type="button" onclick="selectMed()" value="查询" />
+					</div>
+				</div>
+
+				<div class="table">
+					<div class="grid">
+						<table class="ui-table" width="100%">
+							<thead>
+								<tr>
+									<th width="3%"><input type="checkbox" id="all"
+										onclick="checkAll()" /></th>
+									<th width="5%">药品ID</th>
+									<th width="10%">药品名称</th>
+									<th width="10%">药品种类</th>
+									<th width="10%">价格</th>
+									<th width="10%">生产厂家</th>
+									<th width="10%">库存</th>
+									<th width="10%">图片</th>
+									<th width="10%">操作</th>
+								</tr>
+							</thead>
+							<tbody class="ui-table-tbody" id="data">
+								<tr th:each="c:${medicine.list}">
+									<td><input type="checkbox" th:id="${c.id}"
+										onclick="checkOne()" class="checkboxes" /></td>
+									<td th:text="${c.id}"></td>
+									<td th:text="${c.med_name}"></td>
+									<td th:text="${c.typename}"></td>
+									<td th:text="${c.price}"></td>
+									<td th:text="${c.factory}"></td>
+									<td th:text="${c.med_count}"></td>
+									<td><img th:src="${c.picture}"
+										style="width: 30px; height: 30px;" /></td>
+									<td><a href="#" th:onclick="|javascript:buyData(${c.id})|">
+											购买</a></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+
+					<div class="pagination" id="page" style="float: right;">
+						<div id="pagediv">
+							<div>
+								总记录数： <i th:text="${medicine.rowCount}"></i>
+							</div>
+							<div>
+								总页数： <i th:text="${medicine.pageCount}"></i>
+							</div>
+							<div style="margin-right: 30px;">
+								当前页： <i th:text="${medicine.pageIndex}"></i>
+							</div>
+						</div>
+						<span class="current prev">&lt;</span><a href="javascript:;"
+							th:onclick="|javascript:toDataByPage(1)|">首页</a> <a
+							href="javascript:;"
+							th:onclick="|javascript:toDataByPage(${medicine.prePage})|">上一页</a><a
+							href="javascript:;"
+							th:onclick="|javascript:toDataByPage(${medicine.nextPage})|">下一页</a><a
+							href="javascript:;"
+							th:onclick="|javascript:toDataByPage(${medicine.pageCount})|">末页</a>
+						<span class="current next">&gt;</span>
+						<!-- <div class="pxofy">暂时无数据可以显示</div> -->
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="exitDialog" id="buyData" style="overflow: scroll;">
+		<div class="content">
+			<form id="buyMed" method="post"
+				style="margin-left: 20px; margin-right: 20px"
+				enctype="multipart/form-data">
+				<table class="ui-table" style="margin-top: 10px; width: 100%;">
+					<thead>
+						<tr>
+							<th width="5%" style="display: none;"></th>
+							<th width="10%">药品名称</th>
+							<th width="10%">单价/元</th>
+							<th width="10%">数量</th>
+							<th width="10%">金额/元</th>
+							<th width="10%">操作</th>
+						</tr>
+					</thead>
+					<tbody class="ui-table-tbody" id="sellData">
+					</tbody>
+				</table>
+				<div class="buttons" style="margin-top: 20px; float: right;">
+					<input style="margin-left: 100px;" type="button"
+						class="button long2 normal" value="继续" /> <input type="button"
+						class="button long2 normal delAll" value="清空" /> <input
+						type="button" class="button long2 ok" value="结账" />
+				</div>
+			</form>
+		</div>
+	</div>
+</body>
+<script type="text/javascript" src="/js/core.js"></script>
+<script type="text/javascript" src="/js/jquery.dialog.js"></script>
+<script type="text/javascript">
+	$('#buyData').Dialog({
+		title : '购买药品',
+		autoOpen : false,
+		width : 800,
+		height : 400
+	});
+
+	function buyData(id) {
+		$('#buyData').Dialog('open');
+		$
+				.ajax({
+					url : 'toBuyMed',
+					type : 'post',
+					dataType : 'json',
+					data : {
+						id : id
+					},
+					success : function(data) {
+						$("#sellData").html("");
+						$
+								.each(
+										data.data.list,
+										function(index, value) {
+											var div = $("<tr><td style='display: none;'>"
+													+ value.med_id
+													+ "</td><td>"
+													+ value.sellname
+													+ "</td><td>"
+													+ value.sellprice
+													+ "</td><td><input type='number' onblur='updateMedCount(\""
+													+ value.med_id
+													+ "\",this.value)' style='width:100px' min='1' onkeypress='return (/[\d]/.test(String.fromCharCode(event.keyCode)))' class='sellCount' value='"
+													+ value.sellcount
+													+ "'></input></td><td>"
+													+ value.sellprice
+													* value.sellcount
+													+ "</td><td><a href='#' onclick='delData(\""
+													+ value.med_id
+													+ "\")'>删除</a></td></tr>");
+											$("#sellData").append(div);
+										});
+					}
+				});
+	}
+
+	function updateMedCount(id, count) {
+		$
+				.ajax({
+					url : 'updateMedCount',
+					type : 'post',
+					dataType : 'json',
+					data : {
+						id : id,
+						count : count
+					},
+					success : function(data) {
+						if (data.error != null) {
+							alert(data.error);
+						}
+						$("#sellData").html("");
+						$
+								.each(
+										data.data.list,
+										function(index, value) {
+											var div = $("<tr><td style='display: none;'>"
+													+ value.med_id
+													+ "</td><td>"
+													+ value.sellname
+													+ "</td><td>"
+													+ value.sellprice
+													+ "</td><td><input type='number' onblur='updateMedCount(\""
+													+ value.med_id
+													+ "\",this.value)' style='width:100px' min='1' onkeypress='return (/[\d]/.test(String.fromCharCode(event.keyCode)))' class='sellCount' value='"
+													+ value.sellcount
+													+ "'></input></td><td>"
+													+ value.sellprice
+													* value.sellcount
+													+ "</td><td><a href='#' onclick='delData(\""
+													+ value.med_id
+													+ "\")'>删除</a></td></tr>");
+											$("#sellData").append(div);
+										});
+					}
+				})
+	}
+
+	$('#buyData input[type=button]')
+			.click(
+					function() {
+						if ($(this).hasClass('ok')) {
+							if (confirm("确定结账吗？")) {
+								$.ajax({
+									url : "pay",
+									type : "post",
+									dataType : "json",
+									async : false,
+									success : function(data) {
+										alert(data.error);
+										$('#buyData').Dialog('close');
+										getMed();
+									}
+								});
+							}
+						} else if ($(this).hasClass('delAll')) {
+							if (confirm("确定清空吗？")) {
+								$
+										.ajax({
+											url : "delCar",
+											type : "post",
+											dataType : "json",
+											async : false,
+											success : function(data) {
+												$("#sellData").html("");
+												if (data.data.list == null) {
+													var div = $("<tr><td colspan='5' style='text-align: center;' >购物车暂无商品</td></tr>");
+													$("#sellData").append(div);
+												}
+												$
+														.each(
+																data.data.list,
+																function(index,
+																		value) {
+																	var div = $("<tr><td style='display: none;'>"
+																			+ value.med_id
+																			+ "</td><td>"
+																			+ value.sellname
+																			+ "</td><td>"
+																			+ value.sellprice
+																			+ "</td><td><input type='number' onblur='updateMedCount(this.value)' style='width:100px' min='1' onkeypress='return (/[\d]/.test(String.fromCharCode(event.keyCode)))' class='sellCount' value='"
+																			+ value.sellcount
+																			+ "'></input></td><td>"
+																			+ value.sellprice
+																			* value.sellcount
+																			+ "</td><td><a href='#' onclick='delData(\""
+																			+ value.med_id
+																			+ "\")'>删除</a></td></tr>");
+																	$(
+																			"#sellData")
+																			.append(
+																					div);
+																});
+											}
+										});
+							}
+						} else {
+							$('#buyData').Dialog('close');
+						}
+					})
+	function getMed() {
+		$
+				.ajax({
+					url : 'sell/getMed',
+					type : 'post',
+					dataType : 'json',
+					success : function(data) {
+						$("#data").html("");
+						$("#page").html("");
+						$
+								.each(
+										data.list,
+										function(index, value) {
+											var div = $("<tr><td><input type='checkbox' id='"
+													+ value.id
+													+ "' onclick='checkOne()' class='checkboxes' /></td><td>"
+													+ value.id
+													+ "</td><td>"
+													+ value.med_name
+													+ "</td><td>"
+													+ value.typename
+													+ "</td><td>"
+													+ value.price
+													+ "</td><td>"
+													+ value.factory
+													+ "</td><td>"
+													+ value.med_count
+													+ "</td><td><img src="+value.picture+" style='width: 30px; height: 30px;' /></td><td><a href='#' onclick='buyData("
+													+ value.id
+													+ ")'>购买</a></td></tr>");
+											$("#data").append(div);
+										});
+						var page = "<div id='pagediv'><div>总记录数： <i>"
+								+ data.rowCount
+								+ "</i></div><div>总页数： <i>"
+								+ data.pageCount
+								+ "</i></div><div style='margin-right: 30px;'>当前页： <i>"
+								+ data.pageIndex
+								+ "</i></div></div><span class='current prev'>&lt;</span><a href='javascript:;' onclick='toDataByPage(1)'>首页</a> <a href='javascript:;' onclick='toDataByPage("
+								+ data.prePage
+								+ ")'>上一页</a><a href='javascript:;' onclick='toDataByPage("
+								+ data.nextPage
+								+ ")'>下一页</a><a href='javascript:;' onclick='toDataByPage("
+								+ data.pageCount
+								+ ")'>末页</a><span class='current next'>&gt;</span>";
+						$("#page").append(page);
+					}
+				});
+	}
+</script>
+</html>

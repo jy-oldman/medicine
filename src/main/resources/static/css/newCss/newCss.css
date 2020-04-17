@@ -1,0 +1,15 @@
+@CHARSET "UTF-8";
+
+#pagediv {
+	float: left;
+	margin-top: 5px;
+}
+
+#pagediv div {
+	float: left;
+	margin-right: 10px;
+}
+
+#pagediv i {
+	color: blue;
+}

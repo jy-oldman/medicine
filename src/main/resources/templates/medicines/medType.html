@@ -7,8 +7,9 @@
 <link rel="stylesheet" type="text/css" href="css/style.css" />
 <link rel="stylesheet" type="text/css" href="css/WdatePicker.css" />
 <link rel="stylesheet" type="text/css" href="css/skin_/table.css" />
-<link rel="stylesheet" type="text/css" href="/css/jquery.dialog.css" />
+<link rel="stylesheet" type="text/css" href="css/jquery.dialog.css" />
 <link rel="stylesheet" type="text/css" href="css/jquery.grid.css" />
+<link rel="stylesheet" type="text/css" href="/css/newCss/newCss.css" />
 <script type="text/javascript" src="js/jquery.js"></script>
 <script type="text/javascript" src="js/global.js"></script>
 <script type="text/javascript" src="js/jquery.select.js"></script>
@@ -68,7 +69,13 @@
 													+ ")'>删除</a></td>");
 											$("#data").append(div);
 										});
-						var page = "<span class='current prev'>&lt;</span><a href='javascript:;' onclick='toDataByPage(1)'>首页</a> <a href='javascript:;' onclick='toDataByPage("
+						var page = "<div id='pagediv'><div>总记录数： <i>"
+								+ data.rowCount
+								+ "</i></div><div>总页数： <i>"
+								+ data.pageCount
+								+ "</i></div><div style='margin-right: 30px;'>当前页： <i>"
+								+ data.pageIndex
+								+ "</i></div></div><span class='current prev'>&lt;</span><a href='javascript:;' onclick='toDataByPage(1)'>首页</a> <a href='javascript:;' onclick='toDataByPage("
 								+ data.prePage
 								+ ")'>上一页</a><a href='javascript:;' onclick='toDataByPage("
 								+ data.nextPage
@@ -134,7 +141,13 @@
 															+ ")'>删除</a></td>");
 													$("#data").append(div);
 												});
-								var page = "<span class='current prev'>&lt;</span><a href='javascript:;' onclick='toDataByPage(1)'>首页</a> <a href='javascript:;' onclick='toDataByPage("
+								var page = "<div id='pagediv'><div>总记录数： <i>"
+										+ data.data.rowCount
+										+ "</i></div><div>总页数： <i>"
+										+ data.data.pageCount
+										+ "</i></div><div style='margin-right: 30px;'>当前页： <i>"
+										+ data.data.pageIndex
+										+ "</i></div></div><span class='current prev'>&lt;</span><a href='javascript:;' onclick='toDataByPage(1)'>首页</a> <a href='javascript:;' onclick='toDataByPage("
 										+ data.data.prePage
 										+ ")'>上一页</a><a href='javascript:;' onclick='toDataByPage("
 										+ data.data.nextPage
@@ -184,7 +197,13 @@
 													+ ")'>删除</a></td>");
 											$("#data").append(div);
 										});
-						var page = "<span class='current prev'>&lt;</span><a href='javascript:;' onclick='toDataByPage(1)'>首页</a> <a href='javascript:;' onclick='toDataByPage("
+						var page = "<div id='pagediv'><div>总记录数： <i>"
+								+ data.rowCount
+								+ "</i></div><div>总页数： <i>"
+								+ data.pageCount
+								+ "</i></div><div style='margin-right: 30px;'>当前页： <i>"
+								+ data.pageIndex
+								+ "</i></div></div><span class='current prev'>&lt;</span><a href='javascript:;' onclick='toDataByPage(1)'>首页</a> <a href='javascript:;' onclick='toDataByPage("
 								+ data.prePage
 								+ ")'>上一页</a><a href='javascript:;' onclick='toDataByPage("
 								+ data.nextPage
@@ -261,7 +280,18 @@
 							</tbody>
 						</table>
 					</div>
-					<div class="pagination" id="page">
+					<div class="pagination" id="page" style="float: right;">
+						<div id="pagediv">
+							<div>
+								总记录数： <i th:text="${medtype.rowCount}"></i>
+							</div>
+							<div>
+								总页数： <i th:text="${medtype.pageCount}"></i>
+							</div>
+							<div style="margin-right: 30px;">
+								当前页： <i th:text="${medtype.pageIndex}"></i>
+							</div>
+						</div>
 						<span class="current prev">&lt;</span><a href="javascript:;"
 							th:onclick="|javascript:toDataByPage(1)|">首页</a> <a
 							href="javascript:;"
@@ -417,7 +447,13 @@
 													+ ")'>删除</a></td></tr>");
 											$("#data").append(div);
 										});
-						var page = "<span class='current prev'>&lt;</span><a href='javascript:;' onclick='toDataByPage(1)'>首页</a> <a href='javascript:;' onclick='toDataByPage("
+						var page = "<div id='pagediv'><div>总记录数： <i>"
+								+ data.rowCount
+								+ "</i></div><div>总页数： <i>"
+								+ data.pageCount
+								+ "</i></div><div style='margin-right: 30px;'>当前页： <i>"
+								+ data.pageIndex
+								+ "</i></div></div><span class='current prev'>&lt;</span><a href='javascript:;' onclick='toDataByPage(1)'>首页</a> <a href='javascript:;' onclick='toDataByPage("
 								+ data.prePage
 								+ ")'>上一页</a><a href='javascript:;' onclick='toDataByPage("
 								+ data.nextPage

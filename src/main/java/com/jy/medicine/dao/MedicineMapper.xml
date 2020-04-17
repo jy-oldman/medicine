@@ -3,20 +3,9 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jy.medicine.dao.MedicineMapper">
-	<resultMap id="BaseResultMap" type="com.jy.medicine.model.Medicine">
-		<id column="id" property="id" jdbcType="INTEGER" />
-		<result column="type_id" property="type_id" jdbcType="INTEGER" />
-		<result column="med_no" property="med_no" jdbcType="VARCHAR" />
-		<result column="med_name" property="med_name" jdbcType="VARCHAR" />
-		<result column="factory" property="factory" jdbcType="VARCHAR" />
-		<result column="price" property="price" jdbcType="REAL" />
-		<result column="description" property="description" jdbcType="VARCHAR" />
-		<result column="med_count" property="med_count" jdbcType="INTEGER" />
-		<result column="req_count" property="req_count" jdbcType="INTEGER" />
-		<result column="picture" property="picture" jdbcType="VARCHAR" />
-	</resultMap>
 
-	<select id="getAllMedicines" parameterType="Map" resultType="Medicine"
+
+	<select id="getAllMedicines" parameterType="Map" resultType="MedTypeVO"
 		statementType="CALLABLE">
 		{call pro_Paging(
 		#{tableName,mode=IN,jdbcType=VARCHAR},
@@ -31,4 +20,46 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="getMedType" resultType="MedType">
 		select * from med_type
 	</select>
+
+	<insert id="addMed" parameterType="Medicine">
+		insert into
+		medicine(type_id,med_no,med_name,factory,price,description,picture)
+		values(#{type_id},#{med_no},#{med_name},#{factory},#{price},#{description},#{picture})
+	</insert>
+
+	<select id="getMed" parameterType="Medicine" resultType="Medicine">
+		select *
+		from medicine where med_no=#{med_no}
+		and id not in (#{id})
+	</select>
+
+	<select id="getMedByMedNo" parameterType="String" resultType="Medicine">
+		select * from medicine where med_no=#{med_no}
+	</select>
+
+	<select id="getMedById" parameterType="String" resultType="Medicine">
+		select * from medicine where id=#{id}
+	</select>
+
+	<update id="updateMedById" parameterType="Medicine">
+		update medicine set
+		type_id=#{type_id},med_no=#{med_no},med_name=#{med_name},factory=#{factory},
+		price=#{price},description=#{description}
+		<if test="picture!='' and picture!=null">
+			,picture=#{picture}
+		</if>
+		where
+		id=#{id}
+	</update>
+
+	<delete id="delMedById" parameterType="int">
+		delete from medicine
+		where
+		id=#{id}
+	</delete>
+
+	<update id="buyMed" parameterType="Medicine">
+		update medicine set
+		req_count=req_count+#{req_count} where id=#{id}
+	</update>
 </mapper>
