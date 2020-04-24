@@ -23,9 +23,8 @@
 					<a href="javascript:;" class="user-avatar"><span><img
 							th:src="${user.photo}" alt="头像"
 							style="width: 38px; height: 38px; border-radius: 50%; margin-left: -2px; margin-top: -2px;" /></span></a>
-					<span class="user-name" th:text="${user.username}"></span>
-					<!-- <a
-						href="javascript:;" class="more-info"></a> -->
+					<span class="user-name" th:text="${user.username}"></span> <a
+						href="javascript:;" class="more-info"></a>
 				</div>
 				<div class="setting ue-clear">
 					<!-- <div class="setting-skin">
@@ -79,7 +78,7 @@
 		</div>
 	</div>
 
-	<div class="exitDialog">
+	<div class="exitDialog" id="tishi">
 		<div class="content">
 			<div class="ui-dialog-icon"></div>
 			<div class="ui-dialog-text">
@@ -95,10 +94,32 @@
 		</div>
 	</div>
 
+	<div class="exitDialog" id="updatePwd">
+		<div class="content">
+			<form method="post" id="updatePwd1" enctype="multipart/form-data"
+				style="margin-left: 20px">
+				<input type="hidden" id="userId" name="id"
+					th:value="${session.userId}" />
+				<div style="margin-top: 20px">
+					<label style="float: left;">新密码</label> <input type="text"
+						name="userpwd" id="userpwd" style="margin-left: 10px" />
+				</div>
+				<div style="margin-top: 20px">
+					<label style="float: left;">头像</label> <input type="file"
+						id="photo" name="attach_pic" style="margin-left: 10px" />
+				</div>
+				<div class="buttons" style="margin-top: 20px">
+					<input style="margin-right: 150px" type="button"
+						class="button long2 ok" value="确定" /> <input type="button"
+						class="button long2 normal" value="取消" />
+				</div>
+			</form>
+		</div>
+	</div>
+
 	<div class="opt-panel user-opt" style="top: 52px; left: 330px;">
 		<ul>
-			<li><a class="text">用户资料</a></li>
-			<li><a class="text">注销</a></li>
+			<li><a class="text" id="update">修改资料</a></li>
 		</ul>
 		<div class="opt-panel-tl"></div>
 		<div class="opt-panel-tc"></div>
@@ -154,22 +175,66 @@
 
 	});
 
-	$('.exitDialog').Dialog({
+	$('#tishi').Dialog({
 		title : '提示信息',
 		autoOpen : false,
 		width : 400,
 		height : 200
 	});
 
-	$('.exit').click(function() {
-		$('.exitDialog').Dialog('open');
+	$('#updatePwd').Dialog({
+		title : '修改资料',
+		autoOpen : false,
+		width : 400,
+		height : 150
 	});
 
-	$('.exitDialog input[type=button]').click(function(e) {
-		$('.exitDialog').Dialog('close');
+	$('.exit').click(function() {
+		$('#tishi').Dialog('open');
+	});
+
+	$('#update').click(function() {
+		$('#updatePwd').Dialog('open');
+	});
+
+	$('#tishi input[type=button]').click(function(e) {
+		$('#tishi').Dialog('close');
 
 		if ($(this).hasClass('ok')) {
 			window.location.href = "outSystem";
+		}
+	});
+
+	$('#updatePwd input[type=button]').click(function(e) {
+		if ($(this).hasClass('ok')) {
+			var pwd = $("#userpwd").val();
+			var photo = $("#photo").val();
+			if (pwd == "" && photo == "") {
+				alert("请至少输入一项信息！");
+				return false;
+			} else {
+				if (pwd != "") {
+					if (pwd.length < 6) {
+						alert("密码长度不能小于6");
+						return false;
+					}
+				}
+			}
+			$.ajax({
+				url : 'updatePwd',
+				type : 'post',
+				dataType : 'json',
+				data : new FormData($("#updatePwd1")[0]),
+				processData : false,
+				contentType : false,
+				async : false,
+				success : function(msg) {
+					alert(msg.error);
+					$('#updatePwd').Dialog('close');
+				}
+			})
+		} else {
+			$('#updatePwd').Dialog('close');
 		}
 	});
 

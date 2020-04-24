@@ -55,7 +55,7 @@ public interface UserMapper {
 	 * @return
 	 */
 	Users getUser(Users user);
-	
+
 	/**
 	 * 根据用户名查找用户
 	 * 
@@ -87,4 +87,12 @@ public interface UserMapper {
 	 * @return
 	 */
 	int delUserById(int id);
+
+	/**
+	 * 修改密码
+	 * 
+	 * @param user
+	 * @return
+	 */
+	int updatePwd(Users user);
 }

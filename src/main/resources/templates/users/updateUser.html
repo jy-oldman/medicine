@@ -39,8 +39,15 @@
 	function isUpdate() {
 		if (isAdd) {
 			if (confirm("确定修改吗？")) {
-				var username = document.getElementById("username").value;
-				var userId = document.getElementById("userId").value;
+				var username = $("#username").val();
+				var userpwd = $("#userpwd").val();
+				if (userpwd != "") {
+					if (userpwd.length < 6) {
+						alert("密码长度不小于6位字符");
+						return false;
+					}
+				}
+				var userId = $("#userId").val();
 				if (username == "") {
 					$("#error_username").text("用户名不能为空！");
 					return false;
@@ -94,7 +101,8 @@
 				<h2 class="subfild">
 					<span>修改用户</span>
 				</h2>
-				<form action="updateUser" method="post" th:object="${user}">
+				<form action="updateUser" method="post"
+					enctype="multipart/form-data" th:object="${user}">
 					<input type="hidden" th:value="${session.error}" id="error"></input>
 					<input type="hidden" th:value="${session.userLevel}" id="userLevel"></input>
 					<input type="hidden" th:value="${updateIndex}" id="pageIndex"></input>
@@ -112,7 +120,7 @@
 						<div class="kv-item ue-clear time">
 							<label>重设密码</label>
 							<div class="kv-item-content">
-								<input type="text" name="userpwd" />
+								<input type="text" id="userpwd" name="userpwd" maxlength="16" />
 							</div>
 						</div>
 
@@ -129,8 +137,8 @@
 						<div class="kv-item ue-clear">
 							<label>头像</label>
 							<div class="kv-item-content file">
-								<span class="text"></span> <input type="file" name="photo" /> <input
-									type="button" class="button normal long2" value="浏览.." />
+								<span class="text"></span> <input type="file" name="attach_pic" />
+								<input type="button" class="button normal long2" value="浏览.." />
 							</div>
 						</div>
 					</div>

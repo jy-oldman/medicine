@@ -64,7 +64,7 @@ public class SellController {
 	public Paging getMed() {
 		Paging paging = new Paging();
 		paging.setPageIndex(1);
-		return stockService.getAllMedicines(paging);
+		return sellService.getAllMed(paging);
 	}
 
 	@RequestMapping("sell/selectMed")

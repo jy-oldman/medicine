@@ -60,6 +60,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		where id=#{id}
 	</update>
 
+	<update id="updatePwd" parameterType="Users">
+		update users set userpwd=#{userpwd}
+		<if test="photo!='' and photo!=null">
+			,photo=#{photo}
+		</if>
+		where id=#{id}
+	</update>
+
 	<delete id="delUserById" parameterType="int">
 		delete from users where
 		id=#{id}

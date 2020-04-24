@@ -106,4 +106,10 @@ public class UserServiceImpl implements UserService {
 		return userMapper.getUser(user);
 	}
 
+	@Override
+	public int updatePwd(Users user) {
+		user.setUserpwd(MD5Utils.MD5Encode(user.getUserpwd(), "utf-8"));
+		return userMapper.updatePwd(user);
+	}
+
 }

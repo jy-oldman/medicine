@@ -30,6 +30,7 @@ public class UserController {
 	@RequestMapping("login")
 	public String login(Users user, HttpSession session, Model model) {
 		Users user1 = userService.login(user.getUsername(), user.getUserpwd());
+		session.setMaxInactiveInterval(12 * 60 * 60);
 		if (user1 == null) {
 			model.addAttribute("error", "用户名或密码错误！");
 			return "login";
@@ -111,8 +112,7 @@ public class UserController {
 	}
 
 	@RequestMapping("addUser")
-	public String addUser(Users user, @RequestParam(value = "attach_pic", required = true) MultipartFile imFile,
-			HttpSession session) {
+	public String addUser(Users user, @RequestParam(value = "attach_pic") MultipartFile imFile, HttpSession session) {
 		user.setCreatetime(new Date());
 		user.setUserpwd(MD5Utils.MD5Encode(user.getUserpwd(), ""));
 		if (!imFile.isEmpty()) {
@@ -139,7 +139,11 @@ public class UserController {
 	}
 
 	@RequestMapping("updateUser")
-	public String updateUser(Users user, HttpSession session) {
+	public String updateUser(Users user, @RequestParam(value = "attach_pic") MultipartFile imFile,
+			HttpSession session) {
+		if (!imFile.isEmpty()) {
+			user.setPhoto(DBUtil.upLoadFile(imFile));
+		}
 		int result = userService.updateUserById(user);
 		if (result > 0) {
 			session.setAttribute("error", "修改成功！");
@@ -162,6 +166,22 @@ public class UserController {
 			map.put("error", "删除失败！");
 		}
 		map.put("user", userService.getAllUsers(paging));
+		return map;
+	}
+
+	@RequestMapping("updatePwd")
+	@ResponseBody
+	public Map<String, Object> updatePwd(Users user, @RequestParam(value = "attach_pic") MultipartFile imFile) {
+		Map<String, Object> map = new HashMap<>();
+		if (!imFile.isEmpty()) {
+			user.setPhoto(DBUtil.upLoadFile(imFile));
+		}
+		int result = userService.updatePwd(user);
+		if (result > 0) {
+			map.put("error", "修改成功！");
+		} else {
+			map.put("error", "修改失败！");
+		}
 		return map;
 	}
 

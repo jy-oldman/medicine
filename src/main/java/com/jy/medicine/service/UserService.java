@@ -52,7 +52,7 @@ public interface UserService {
 	 * @return
 	 */
 	public Users getUser(Users user);
-	
+
 	/**
 	 * 根据用户名查找用户
 	 * 
@@ -84,4 +84,12 @@ public interface UserService {
 	 * @return
 	 */
 	public int delUserById(String id, String type);
+
+	/**
+	 * 修改密码
+	 * 
+	 * @param user
+	 * @return
+	 */
+	int updatePwd(Users user);
 }
